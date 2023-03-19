@@ -2,20 +2,24 @@
 
 This is a Twitter Clone with extra features, implemented using React, Tailwind, Node, Express, PostgreSQL, RESTFul API, GraphQL, Authentication, WebSocket, and Notification technologies.
 
+<h2> Demo </h2>
+Soon! You can follow the progress on my social media  <a href='https://twitter.com/ZackaryDevove'>Twitter</a> or <a href='https://www.linkedin.com/in/zackarydevove/'>LinkedIn</a>
+
 <h2> Features </h2>
 
 <ul>
-<li>Authentication</li>
+<li>Authentication: Local and Oauth2</li>
 <li>WebSocket for real-time chat</li>
 <li>Notifications</li>
 <li>User profile management</li>
 <li>Contact list management</li>
 <li>Multi-language support</li>
 <li>Dark mode</li>
-<li>Posting, liking, sharing, and answering content</li>
-<li>Following and direct messaging other users</li>
-<li>Chat rooms, public, private, and password-protected</li>
-<li>Posting pictures, videos, documents, and other files</li>
+<li>Can Post, like, share, and reply content</li>
+<li>Can Bookmarks content</li>
+<li>Can Follow and direct message other users</li>
+<li>Chat rooms with Admin power</li>
+<li>Can Post pictures, videos, documents, and other files</li>
 <li>Emojis and GIFs</li>
 <li>Voice and video calls</li>
 <li>Typing indicators</li>
@@ -42,3 +46,7 @@ This is a Twitter Clone with extra features, implemented using React, Tailwind, 
 <li>WebSocket: Real-time communication between server and clients.</li>
 <li>Notification: Used to send push notifications to users.</li>
 </ul>
+
+<h2> Conclusion </h2>
+
+Thank you for checking out my Twitter Clone web app project! I hope you find it useful and informative. If you have any questions or feedback, feel free to contact me at Zackary.devove@hotmail.com or on my social media (<a href='https://twitter.com/ZackaryDevove'>Twitter</a> / <a href='https://www.linkedin.com/in/zackarydevove/'>LinkedIn</a>).
