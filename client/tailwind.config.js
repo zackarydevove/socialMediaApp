@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'login_bg': "url('/home/zack/TwitterClone/client/src/images/twitterbg.png')",
+        'login_bg': "url('./images/twitterbg.png')",
       }
     },
   },
