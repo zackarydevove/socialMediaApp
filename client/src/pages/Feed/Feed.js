@@ -47,7 +47,7 @@ function Feed() {
                 <div className='max-sm:hidden'>
                     <PostTweet />
                 </div>
-                <TweetBlock />
+                {/* <TweetBlock /> */}
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>

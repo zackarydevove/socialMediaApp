@@ -45,7 +45,7 @@ function Bookmarks() {
                     </div>
                     <hr className='mt-2 border-t-[#2f3336]' />
                 </div>
-                <TweetBlock />
+                {/* <TweetBlock /> */}
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>

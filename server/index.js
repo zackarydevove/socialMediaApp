@@ -45,11 +45,26 @@ app.use(passport.session());
 
 // MongoDB
 
+const postSchema = new mongoose.Schema({
+    type: { type: String, required: true }, // Tweet or reply
+    creator: { type: mongoose.ObjectId, required: true },
+    content: { type: String, required: true },
+    likes: {
+        users: { type: [mongoose.ObjectId], default: []},  // users id
+        count: { type: Number, default: 0 },
+    },
+    retweet: { type: Number, default: 0 },
+    replies: [this],
+    createdAt: { type: Date, default: Date.now },
+});
+
+const Post = mongoose.model('Post', postSchema);
+
 const userSchema = new mongoose.Schema({
     googleId: String,
-    email: String,
-    username: String,
-    password: String,
+    email: { type: String, required: true },
+    username: { type: String, required: true },
+    password: { type: String, required: true },
     phone: String,
     country: String,
     birth: Date,
@@ -57,6 +72,10 @@ const userSchema = new mongoose.Schema({
     creation: Date,
     description: String,
     link: String,
+    post: {
+        type: [postSchema],
+        default: []
+    }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -211,6 +230,72 @@ app.get('/', (req, res) => {
     }
 })
 
+
+app.post('/post', (req, res) => {
+    User.findOne(req.user._id)
+    .then((user) => {
+        const newPost = new Post({
+            type: req.body.type, // Tweet or reply
+            creator: user._id,
+            content: req.body.content,
+        })
+        console.log(newPost);
+        user.post = user.post || [];
+        user.post.unshift(newPost);
+        return user.save();
+    })
+    .catch((err) => console.log(err));
+})
+
+app.delete('/post', (req, res) => {
+    const postId = req.body.post._id;
+    User.findOneAndUpdate(
+        { _id: req.user._id },
+        { $pull: { post: { _id: postId } } },
+        { new: true }
+    )
+    .then((user) => {
+        if (user) {
+            res.status(200).send('Post deleted');
+        } else {
+            res.status(404).send('User not found');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Server error');
+    });
+});
+
+app.post('/post/like', (req, res) => {
+    User.findOne(req.user._id)
+    .then((user) => {
+        const post = user.post.id(req.body.postId);
+        let users = post.likes.users;
+        let likes = post.likes.count;
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+        if (likes === NaN) {
+            likes = 0;
+        }
+        if (users && users.includes(user._id)) {    // Unlike
+            const index = users.indexOf(user._id);
+            if (index > -1) {
+                users.splice(index, 1);
+                likes -= 1;
+            }
+        } else {
+            users = users || []
+            users.push(user._id);
+            likes += 1;
+        }
+        post.likes.count = likes;
+        user.save();
+        return res.send(post);
+    })
+    .catch((err) => console.log(err));
+})
 
 
 

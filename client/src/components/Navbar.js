@@ -41,8 +41,17 @@ function Navbar(props) {
         <div className='p-3 sm:hidden'>
           {/* Profile picture */}
           <div className='flex justify-between'>
-            <div className='w-12 h-12 bg-blue-800 rounded-full'/>
-            <BsThreeDots size={'1.3em'}/>
+            <div className='w-12 h-12 bg-blue-800 rounded-full relative'/>
+            <BsThreeDots size={'1.3em'}
+              onClick={() => setOpenProfile(!openProfile)}/>
+              {
+                  openProfile ?
+                  <div className='w-[150px] flex justify-center items-center p-3 bg-black border border-[#2f3336] shadow-[0px_0px_5px_-1px_rgba(0,0,0,0.3)] shadow-white rounded-lg hover:cursor-pointer hover:bg-gray-700 transition absolute right-2 top-24' 
+                    onClick={logout}>
+                    <p>Log out</p>
+                  </div>
+                  : null
+                }
           </div>
           {/* Profile name */}
           <div className='flex flex-col'>
@@ -99,15 +108,14 @@ function Navbar(props) {
               <h1 className='text-xl sm:hidden xl:block'>Settings</h1>
             </div>
             <div className='w-full max-sm:hidden h-14 flex items-center gap-5 hover:cursor-pointer'>
-              <PostTweetButton />
+              <PostTweetButton update={props.update} setUpdate={props.setUpdate}/>
             </div>
-              {/* Add logout option in div below */}
           </div>
-            <div className='max-sm:hidden lg:p-5 lg:mb-5 w-full h-14 flex flex-col justify-center lg:justify-between items-center gap-2 hover:cursor-pointer'
+            <div className='max-sm:hidden lg:p-5 lg:mb-5 w-full h-14 flex flex-col justify-center lg:justify-between items-center gap-2 hover:cursor-pointer relative'
               onClick={() => setOpenProfile(!openProfile)}>
                 {
                   openProfile ?
-                  <div className='px-12 p-3 bg-black border border-[#2f3336] shadow shadow-white rounded-lg hover:cursor-pointer' 
+                  <div className='w-[150px] flex justify-center items-center p-3 bg-black border border-[#2f3336] shadow-[0px_0px_5px_-1px_rgba(0,0,0,0.3)] shadow-white rounded-lg hover:cursor-pointer hover:bg-gray-700 transition absolute sm:top-[-80%]' 
                     onClick={logout}>
                     <p>Log out</p>
                   </div>

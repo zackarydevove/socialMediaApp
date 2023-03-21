@@ -1,9 +1,12 @@
 import React from 'react';
 import { BsCardImage, BsFillEmojiSmileFill } from 'react-icons/bs';
 import { AiOutlineFileGif } from 'react-icons/ai'
-
+import { useState } from 'react';
+import posttweet from '../utils/posttweet';
 
 function PostTweet() {
+    const [content, setContent] = useState('');
+
   return (
     <div>
         <div className='flex p-2'>
@@ -16,7 +19,8 @@ function PostTweet() {
             <div className='flex flex-col p-1 w-full'>
                 {/* up */}
                 <div>
-                    <textarea placeholder="What's happening?" className='w-full text-white bg-black'></textarea>
+                    <textarea placeholder="What's happening?" className='w-full text-white bg-black' value={content}
+                        onChange={e => setContent(e.target.value)}></textarea>
                 </div>
                 {/* down */}
                 <div className='flex justify-between items-center'>
@@ -25,7 +29,8 @@ function PostTweet() {
                         <AiOutlineFileGif size={'1.3em'} className='hover:cursor-pointer'/>
                         <BsFillEmojiSmileFill size={'1.3em'} className='hover:cursor-pointer'/>
                     </div>
-                    <button className='xl:pl-5 xl:pr-5 p-2 pl-3 pr-3 bg-blue-500 rounded-3xl'>Tweet</button>
+                    <button className='xl:pl-5 xl:pr-5 p-2 pl-3 pr-3 bg-blue-500 rounded-3xl'
+                        onClick={() => posttweet(content)}>Tweet</button>
                 </div>
 
             </div>

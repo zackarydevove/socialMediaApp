@@ -20,13 +20,15 @@ function Main() {
             withCredentials: true,
             url: 'http://localhost:5000/user'
         }).then((res) => {
+            console.log(res.data);
             setUserInfo(res.data);
         }).catch((err) => {
             console.log(err);
         });
     }, [])
 
-    if (userInfo) {
+    console.log(userInfo)
+    if (userInfo._id) {
         navigate('/home');
     }
 

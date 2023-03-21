@@ -6,33 +6,46 @@ import { FaEnvelope } from 'react-icons/fa';
 import TweetBlock from '../../components/TweetBlock'
 import PostTweetButton from '../../components/PostTweetButton'
 import Navbar from '../../components/Navbar'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PostTweet from '../../components/PostTweet';
 import Search from '../../components/SearchBar';
 import Recommend from '../../components/Recommend';
 import Terms from '../../components/Terms';
 import { useNavigate } from 'react-router-dom';
 import ProfileInfo from '../../components/ProfileInfo';
+import axios from 'axios';
 
 function Profile() {
     const [openNav, setOpenNav] = useState(false);
+    const [user, setUser] = useState({});
+    const [update, setUpdate] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            withCredentials: true,
+            url: 'http://localhost:5000/user'
+        }).then((res) => setUser(res.data))
+        .catch((err) => console.log(err));
+    }, [update])
+    console.log(user);
 
     return (
         <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             {openNav ? 
             <div>
-                <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
+                <Navbar openNav={openNav} setOpenNav={setOpenNav} update={update} setUpdate={setUpdate}/> 
             </div>
             : 
             <div className='max-sm:hidden'>
-                <Navbar openNav={openNav} setOpenNav={setOpenNav} />
+                <Navbar openNav={openNav} setOpenNav={setOpenNav} update={update} setUpdate={setUpdate}/>
             </div>
             }
             <div className='max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
                 <div className='sm:hidden'>
-                    <PostTweetButton/>
+                    <PostTweetButton update={update} setUpdate={setUpdate}/>
                 </div>
                 <div>
                     <h1 className='max-sm:hidden text-xl font-bold p-3'>Home</h1>
@@ -57,7 +70,15 @@ function Profile() {
                     </div>
                         <hr className='mt-2 border-t-[#2f3336] ' />
                 </div>
-                <TweetBlock />
+                {
+                    user && user.post ?
+                    user.post.map((post, index) => {
+                        return (
+                            <TweetBlock key={index} username={user.username} post={post} update={update} setUpdate={setUpdate} />
+                        )
+                    })
+                    : null
+                }
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>
