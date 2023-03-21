@@ -3,9 +3,33 @@ import { RxCross2 } from 'react-icons/rx';
 import { BsTwitter, BsMeta } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 function Login(props) {
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+
     const navigate = useNavigate();
+
+    const login = () => {
+        console.log(id);
+        console.log(password);
+        axios ({
+            method: 'POST',
+            data: {
+                usernameOrEmail: id,
+                password: password
+            },
+            withCredentials: true,
+            url: 'http://localhost:5000/login'
+        }).then((res) => {
+            console.log(res);
+            if (res.data === 'Successfully Authenticated') {
+                navigate('/home');
+            }
+        }).catch((err) => console.log())
+    }
 
   return (
     <div className='w-screen h-screen absolute top-0 left-0 flex justify-center items-center'>
@@ -42,16 +66,19 @@ function Login(props) {
                     <div className='flex flex-col gap-3'>
                         {/* Username */}
                         <div className='h-14 w-[300px] border flex p-3'>
-                            <input type='text' placeholder='Email, or username'></input>
+                            <input type='text' placeholder='Email, or username' value={id}
+                                onChange={e => setId(e.target.value)}></input>
                         </div>
                         {/* Password */}
                         <div className='h-14 w-[300px] border flex p-3'>
-                            <input type='password' placeholder='Password'></input>
+                            <input type='password' placeholder='Password' value={password}
+                                onChange={e => setPassword(e.target.value)}></input>
                         </div>
                     </div>
 
                     {/* Login button */}
-                    <div className='w-[300px] h-9 bg-black flex justify-center items-center rounded-3xl hover:cursor-pointer'>
+                    <div className='w-[300px] h-9 bg-black flex justify-center items-center rounded-3xl hover:cursor-pointer'
+                        onClick={login}>
                         <p className='text-white'>Login</p>
                     </div>
 

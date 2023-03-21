@@ -6,9 +6,28 @@ import { FaEnvelope, FaUserAlt } from 'react-icons/fa';
 import { AiFillSetting, AiOutlineTwitter  } from 'react-icons/ai'
 import PostTweetButton from './PostTweetButton';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 function Navbar(props) {
+  const [openProfile, setOpenProfile] = useState(false);
+
   const navigate = useNavigate();
+
+  const logout = () => {
+    axios({
+      method: 'POST',
+      withCredentials: true,
+      url: 'http://localhost:5000/logout'
+    }).then((res) => {
+      console.log(res.data);
+      if (res.data === 'Logout successfully') {
+        navigate('/');
+      };
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
 
   return (
       <div className='xl:w-[275px] w-[280px] sm:w-[88px] h-screen border-r border-r-[#2f3336] max-sm:absolute max-sm:z-10 bg-black'>
@@ -84,19 +103,30 @@ function Navbar(props) {
             </div>
               {/* Add logout option in div below */}
           </div>
-            <div className='max-sm:hidden lg:p-5 lg:mb-5 w-full h-14 flex justify-center lg:justify-between items-center gap-2 hover:cursor-pointer'>
-              <div className='flex gap-2 items-center '>
-                {/* Profile Picture */}
-                <div className='h-10 w-10 bg-blue-900 rounded-full' />
-                {/* Profile Name */}
-                <div className='flex flex-col max-xl:hidden'>
-                    <h1 >Zack Devove</h1>
-                    <p className='text-gray-600'>@zackarydevove</p>
+            <div className='max-sm:hidden lg:p-5 lg:mb-5 w-full h-14 flex flex-col justify-center lg:justify-between items-center gap-2 hover:cursor-pointer'
+              onClick={() => setOpenProfile(!openProfile)}>
+                {
+                  openProfile ?
+                  <div className='px-12 p-3 bg-black border border-[#2f3336] shadow shadow-white rounded-lg hover:cursor-pointer' 
+                    onClick={logout}>
+                    <p>Log out</p>
+                  </div>
+                  : null
+                }
+                <div className='flex'>
+                  <div className='flex gap-2 items-center '>
+                    {/* Profile Picture */}
+                    <div className='h-10 w-10 bg-blue-900 rounded-full' />
+                    {/* Profile Name */}
+                    <div className='flex flex-col max-xl:hidden'>
+                        <h1 >Zack Devove</h1>
+                        <p className='text-gray-600'>@zackarydevove</p>
+                    </div>
+                  </div>
+                  <div className='p-3 max-xl:hidden'>
+                    <BsThreeDots size={'1.3em'} />
+                  </div>
                 </div>
-              </div>
-              <div className='p-3 max-xl:hidden'>
-                <BsThreeDots size={'1.3em'} />
-              </div>
             </div>
         </div>
       </div>

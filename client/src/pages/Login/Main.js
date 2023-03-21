@@ -3,11 +3,33 @@ import { BsTwitter, BsMeta } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
 import Login from './Login';
 import Register from './Register';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Main() {
     const [loginClick, setLoginClick] = useState(false);
     const [registerClick, setRegisterClick] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            withCredentials: true,
+            url: 'http://localhost:5000/user'
+        }).then((res) => {
+            setUserInfo(res.data);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }, [])
+
+    if (userInfo) {
+        navigate('/home');
+    }
+
   return (
     <div className='h-screen flex flex-col overflow-hidden'>
         {
