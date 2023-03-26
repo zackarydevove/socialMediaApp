@@ -7,14 +7,17 @@ import Message from "./pages/Message/Message";
 import Bookmarks from "./pages/Bookmarks/Bookmarks";
 import Settings from "./pages/Settings/Settings";
 import Main from "./pages/Login/Main";
+import Thread from "./pages/Thread/Thread";
 
 function App() {
+
   return (
     <Router>
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/home' element={<Feed />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile/:username' element={<Profile />} />
+        <Route path='/tweet/:postId' element={<Thread />} />
         <Route path='/explore' element={<Search />} />
         <Route path='/notification' element={<Notification />} />
         <Route path='/message' element={<Message />} />

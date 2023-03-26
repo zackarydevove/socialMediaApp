@@ -1,24 +1,53 @@
 import React from 'react'
+import { useState, useEffect } from 'react';
 import { AiOutlineTwitter } from 'react-icons/ai'
 import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
 import { ImSearch } from 'react-icons/im';
 import { FaEnvelope } from 'react-icons/fa';
-import TweetBlock from '../../components/TweetBlock'
-import PostTweetButton from '../../components/PostTweetButton'
-import Navbar from '../../components/Navbar'
-import { useState } from 'react';
-import PostTweet from '../../components/PostTweet';
-import SearchBar from '../../components/SearchBar';
-import Recommend from '../../components/Recommend';
-import Terms from '../../components/Terms';
+import PostTweetButton from '../../components/Tweet/PostTweetButton'
+import Navbar from '../../components/More/Navbar'
+import PostTweet from '../../components/Tweet/PostTweet';
+import SearchBar from '../../components/More/SearchBar';
+import Recommend from '../../components/More/Recommend';
+import Terms from '../../components/More/Terms';
+import TweetBlock from '../../components/Tweet/TweetBlock';
+import { getUser } from '../../api/auth';
+import { getFeed } from '../../api/feed';
 
 function Feed() {
     const [openNav, setOpenNav] = useState(false);
+    const [user, setUser] = useState({});
+    const [feedPosts, setFeedPosts] = useState([]);
+    const [page, setPage] = useState(1);
 
-    console.log(openNav);
+    useEffect(() => {
+        console.log('step1 user._id:', user._id);
+        if (user._id) {
+            getFeed(user._id, page)
+            .then((newPosts) => {
+                setFeedPosts((prevPosts) => [...prevPosts, ...newPosts]);
+            })
+            .catch((err) => console.log(err));
+        }
+    }, [user, page]);
+
+    useEffect(() => {
+        getUser()
+        .then((res) => {
+            setUser(res);
+        })
+        .catch((err) => console.log(err));
+    }, [])
+
+    const handleScroll = (e) => {
+        const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+        if (scrollHeight - scrollTop === clientHeight) {
+            setPage((prevPage) => prevPage + 1);
+        }
+    };
 
     return (
-        <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+        <div onScroll={handleScroll} className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -47,7 +76,15 @@ function Feed() {
                 <div className='max-sm:hidden'>
                     <PostTweet />
                 </div>
-                {/* <TweetBlock /> */}
+                <div>
+                    {
+                    feedPosts ?
+                        feedPosts.map((post, index) => (
+                            <TweetBlock key={index} post={post} />
+                        ))
+                    : null
+                }
+                </div>
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>

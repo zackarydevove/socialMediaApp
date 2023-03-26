@@ -1,11 +1,11 @@
 import React from 'react'
+import { useState } from 'react';
 import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
 import { ImSearch } from 'react-icons/im';
 import { FaEnvelope } from 'react-icons/fa';
-import PostTweetButton from '../../components/PostTweetButton'
-import Navbar from '../../components/Navbar'
-import { useState } from 'react';
-import SearchBar from '../../components/SearchBar';
+import PostTweetButton from '../../components/Tweet/PostTweetButton'
+import Navbar from '../../components/More/Navbar'
+import SearchBar from '../../components/More/SearchBar';
 import Setting from '../../components/Settings/Setting';
 import AccountInfo from '../../components/Settings/AccountInfo';
 import PasswordInfo from '../../components/Settings/PasswordInfo';
@@ -13,8 +13,6 @@ import PasswordInfo from '../../components/Settings/PasswordInfo';
 function Settings() {
     const [openNav, setOpenNav] = useState(false);
     const [show, setShow] = useState('');
-
-    console.log(openNav);
 
     return (
         <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>

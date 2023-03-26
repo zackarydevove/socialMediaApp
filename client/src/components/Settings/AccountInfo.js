@@ -19,7 +19,7 @@ function AccountInfo() {
             <div className='flex justify-between items-center'>
                 <div className='flex flex-col'>
                     <p>Username</p>
-                    <p className='text-sm text-gray-500'>@zackarydevove</p>
+                    <p className='text-sm text-gray-500'>@abc</p>
                 </div>
                 <AiFillEdit size={'1.3em'} className='hover:cursor-pointer' />
             </div>
@@ -35,7 +35,7 @@ function AccountInfo() {
             <div className='flex justify-between items-center'>
                 <div className='flex flex-col'>
                 <p>Email</p>
-                    <p className='text-sm text-gray-500'>zackarydevove@hotmail.com</p>
+                    <p className='text-sm text-gray-500'>abc@hotmail.com</p>
                 </div>
                 <AiFillEdit size={'1.3em'} className='hover:cursor-pointer' />
             </div>

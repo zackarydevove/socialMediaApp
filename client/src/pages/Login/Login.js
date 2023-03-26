@@ -4,7 +4,7 @@ import { BsTwitter, BsMeta } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
+import { login } from '../../api/auth';
 
 function Login(props) {
     const [id, setId] = useState('');
@@ -12,23 +12,14 @@ function Login(props) {
 
     const navigate = useNavigate();
 
-    const login = () => {
-        console.log(id);
-        console.log(password);
-        axios ({
-            method: 'POST',
-            data: {
-                usernameOrEmail: id,
-                password: password
-            },
-            withCredentials: true,
-            url: 'http://localhost:5000/login'
-        }).then((res) => {
-            console.log(res);
-            if (res.data === 'Successfully Authenticated') {
+    const handleLogin = () => {
+        login(id, password)
+        .then((res) => {
+            if (res === 'Successfully Authenticated') {
                 navigate('/home');
             }
-        }).catch((err) => console.log())
+        })
+        .catch((err) => console.log('Error during login', err));
     }
 
   return (
@@ -78,7 +69,7 @@ function Login(props) {
 
                     {/* Login button */}
                     <div className='w-[300px] h-9 bg-black flex justify-center items-center rounded-3xl hover:cursor-pointer'
-                        onClick={login}>
+                        onClick={handleLogin}>
                         <p className='text-white'>Login</p>
                     </div>
 

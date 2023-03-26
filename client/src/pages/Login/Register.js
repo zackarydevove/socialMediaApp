@@ -1,10 +1,9 @@
 import React from 'react';
 import { RxCross2 } from 'react-icons/rx';
-import { BsTwitter, BsMeta } from 'react-icons/bs'
-import { FcGoogle } from 'react-icons/fc'
-import axios from 'axios'
+import { BsTwitter } from 'react-icons/bs'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { register } from '../../api/auth';
 
 function Register(props) {
     const [username, setUsername] = useState('');
@@ -14,25 +13,14 @@ function Register(props) {
 
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        axios({
-            method: 'POST',
-            data: {
-                username: username,
-                email: email,
-                password: password,
-                confirmPassword: confirmPassword,
-            },
-            withCredentials: true,
-            url: 'http://localhost:5000/register'
-        }).then((res) => {
-            console.log(res);
-            if (res.data === 'User successfully created and authenticated') {
+    const handleRegister = () => {
+        register(username, email, password, confirmPassword)
+        .then((res) => {
+            if (res === 'User successfully created and authenticated') {
                 navigate('/home');
             }
-        }).catch((err) => {
-            console.log(err);
-        });
+        })
+        .catch((err) => console.log('Error during sign up', err));
     }
 
   return (
@@ -74,7 +62,7 @@ function Register(props) {
 
                     {/* Register button */}
                     <div className='w-[300px] h-9 bg-black flex justify-center items-center rounded-3xl hover:cursor-pointer'
-                        onClick={handleClick}>
+                        onClick={handleRegister}>
                         <p className='text-white'>Register</p>
                     </div>
 
