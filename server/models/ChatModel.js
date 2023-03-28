@@ -5,6 +5,9 @@ const chatSchema = new mongoose.Schema({
         type: [mongoose.ObjectId],
         default: [],
         required: true,
+    },
+    lastMessage: {
+        type: mongoose.ObjectId,
     }
 })
 

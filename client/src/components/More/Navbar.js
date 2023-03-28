@@ -4,15 +4,17 @@ import { BsFillHouseFill, BsFillBellFill, BsThreeDots, BsBookmarkFill } from 're
 import { ImSearch } from 'react-icons/im';
 import { FaEnvelope, FaUserAlt } from 'react-icons/fa';
 import { AiFillSetting, AiOutlineTwitter  } from 'react-icons/ai'
+import { MdVerified } from 'react-icons/md';
 import PostTweetButton from '../Tweet/PostTweetButton';
+import TwitterBlue from './TwitterBlue';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { logout, getUser } from '../../api/auth';
 
 function Navbar(props) {
   const [openProfile, setOpenProfile] = useState(false);
   const [user, setUser] = useState({});
+  const [openTwitterBlue, setOpenTwitterBlue] = useState(false);
 
   const navigate = useNavigate();
 
@@ -35,6 +37,10 @@ function Navbar(props) {
   return (
       <div className='xl:w-[275px] w-[280px] sm:w-[88px] h-screen border-r border-r-[#2f3336] max-sm:absolute max-sm:z-10 bg-black'>
         {/* Account info */}
+        { openTwitterBlue ?
+          <TwitterBlue setOpenTwitterBlue={setOpenTwitterBlue} />
+          : null
+        }
         <div className='sm:hidden flex justify-between items-center p-3'>
           <h1 className='text-xl'>Account info</h1>
           <RxCross1 size={'1.3em'} onClick={() => props.setOpenNav(!props.openNav)}/>
@@ -105,6 +111,10 @@ function Navbar(props) {
             <div className='h-14 flex items-center p-3 gap-5 max-xl:hover:bg-slate-900 hover:cursor-pointer' onClick={() => navigate('/bookmarks')}>
               <BsBookmarkFill  size={'1.4em'} />
               <h1 className='text-xl sm:hidden xl:block'>Bookmarks</h1>
+            </div>
+            <div className='h-14 flex items-center p-3 gap-5 max-xl:hover:bg-slate-900 hover:cursor-pointer' onClick={() => setOpenTwitterBlue(true)}>
+              <MdVerified  size={'1.4em'} />
+              <h1 className='text-xl sm:hidden xl:block'>Twitter Blue</h1>
             </div>
             <div className='h-14 flex items-center p-3 gap-5 max-xl:hover:bg-slate-900 hover:cursor-pointer hover:bg-gray-500 hover:bg-opacity-20 hover:rounded-[20' onClick={() => navigate('/settings')}>
               <AiFillSetting  size={'1.4em'} />

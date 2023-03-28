@@ -15,7 +15,7 @@ function Notification() {
     const [openNav, setOpenNav] = useState(false);
 
     return (
-        <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+        <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 

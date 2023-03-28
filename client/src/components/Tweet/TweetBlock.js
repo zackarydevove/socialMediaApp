@@ -80,7 +80,7 @@ function TweetBlock(props) {
     }
 
     return (
-        <div className='hover:cursor-pointer relative'>
+        <div className='font-opensans hover:cursor-pointer relative'>
     
             { openReply ? <Reply post={post} openReply={openReply} setOpenReply={setOpenReply}/> : null }
     

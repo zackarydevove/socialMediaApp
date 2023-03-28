@@ -2,15 +2,16 @@ import React from 'react'
 import UserMsg from './UserMsg'
 import OtherMsg from './OtherMsg'
 
-function Chat({ messages, currentUser}) {
+function Chat({ messages, currentUser, handleScroll}) {
   return (
-    <div className="h-full flex flex-col-reverse  overflow-y-scroll">
+    <div className="h-full flex flex-col-reverse overflow-y-scroll"
+      onScroll={handleScroll}>
       {messages && messages.length > 0 ? (
-        messages.map((message) => {
+        messages.map((message, index) => {
           if (message.sender.toString() === currentUser._id.toString()) {
-            return <UserMsg key={message._id} message={message} />;
+            return <UserMsg key={index} message={message} />;
           } else {
-            return <OtherMsg key={message._id} message={message} />;
+            return <OtherMsg key={index} message={message} />;
           }
         })
       ) : (
@@ -18,6 +19,6 @@ function Chat({ messages, currentUser}) {
       )}
     </div>
   );
-}
+} 
 
 export default Chat

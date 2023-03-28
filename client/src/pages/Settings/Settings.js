@@ -15,7 +15,7 @@ function Settings() {
     const [show, setShow] = useState('');
 
     return (
-        <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+        <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -33,9 +33,6 @@ function Settings() {
                 <div>
                     <div className='flex justify-end sm:justify-between p-3'>
                         <h1 className='max-sm:hidden text-xl font-bold'>Settings</h1>
-                    </div>
-                    <div className='flex justify-center items-center'>
-                            <SearchBar SearchPage={true} placeHolder='Search Settings' />
                     </div>
                         <hr className='mt-2 border-t-[#2f3336] ' />
                 </div>

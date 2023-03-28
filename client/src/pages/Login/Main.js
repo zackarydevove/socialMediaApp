@@ -40,7 +40,7 @@ function Main() {
       
               }
               {/* Main */}
-              <div className='h-full flex max-lg:flex-col-reverse'>
+              <div className='font-opensans h-full flex max-lg:flex-col-reverse'>
                   {/* Left */}
                   <div className='max-lg:hidden flex-grow h-full bg-login_bg flex justify-center items-center'>
                       <BsTwitter size={'22.5em'} className='text-white'/>

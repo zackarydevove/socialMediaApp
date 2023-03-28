@@ -11,7 +11,7 @@ function AddDM({openSearch, setOpenSearch, onCreateChat, user}) {
     const [followedUsers, setFollowedUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedUser, setSelectedUser] = useState(null); // Change to array for groups chat
+    const [selectedUser, setSelectedUser] = useState([]); // Change to array for groups chat
     
     useEffect(() => {
         if (user._id) {
@@ -37,6 +37,25 @@ function AddDM({openSearch, setOpenSearch, onCreateChat, user}) {
         }
     };
 
+    const handleSelectUser = (user) => {
+        // If user is already selected, remove them from the array
+        if (selectedUser.some((selected) => selected._id === user._id)) {
+          setSelectedUser((prevSelected) =>
+            prevSelected.filter((selected) => selected._id !== user._id)
+          );
+        } else {
+          // User is not selected, add them to the array
+          setSelectedUser((prevSelected) => [...prevSelected, user]);
+        }
+      };
+
+    const handleDeleteSelectedUser = (deletedUser) => {
+        setSelectedUser((prevSelected) =>
+            prevSelected.filter((selected) => selected._id !== deletedUser._id)
+        );
+    };
+
+      
     if (isLoading) {
         return <div>Loading...</div>;
       }
@@ -52,9 +71,9 @@ function AddDM({openSearch, setOpenSearch, onCreateChat, user}) {
                                 onClick={() => setOpenSearch(false)}/>
                             <p className='pl-5 text-xl'>New message</p>
                         </div>
-                        <button className={`w-[85px] text-center p-2 rounded-3xl  ${selectedUser ? 'bg-blue-500' : 'bg-gray-500'} `} 
+                        <button className={`w-[85px] text-center p-2 rounded-3xl  ${selectedUser.length > 0 ? 'bg-blue-500' : 'bg-gray-500'} `} 
                         onClick={() => {
-                            if (selectedUser) {
+                            if (selectedUser.length > 0) {
                               onCreateChat(selectedUser);
                               setOpenSearch(false);
                             }
@@ -67,15 +86,17 @@ function AddDM({openSearch, setOpenSearch, onCreateChat, user}) {
                             <SearchUserToDm handleSearch={handleSearch}/>
                         </div>
                     </div>
-                    <div className='p-1'>
+                    <div className='p-1 flex'>
                         {
                             selectedUser ?
-                                <div className=' w-fit p-[0.15rem] flex items-center border border-[#2f3336] rounded-[20px] '>
-                                    <div className='h-6 w-6 bg-blue-500 rounded-full'/>
-                                    <p className='pl-2 pr-2'>{selectedUser.username}</p>
-                                    <RxCross1 className='text-blue-500 hover:cursor-pointer'
-                                        onClick={() => setSelectedUser(null)}/>
-                                </div>
+                                selectedUser.map((user) => (
+                                    <div className=' w-fit p-[0.15rem] flex items-center border border-[#2f3336] rounded-[20px] '>
+                                        <div className='h-6 w-6 bg-blue-500 rounded-full'/>
+                                        <p className='pl-2 pr-2'>{user.username}</p>
+                                        <RxCross1 className='text-blue-500 hover:cursor-pointer'
+                                            onClick={() =>  handleDeleteSelectedUser(user)}/>
+                                    </div>
+                                ))
                             : null
                         }
                         
@@ -87,7 +108,7 @@ function AddDM({openSearch, setOpenSearch, onCreateChat, user}) {
                                 return (
                                     <div className='flex mt-3 p-3 hover:bg-gray-500 hover:bg-opacity-20 hover:cursor-pointer'
                                     key={followedUser._id}
-                                    onClick={() => setSelectedUser(followedUser)}>
+                                    onClick={() => handleSelectUser(followedUser)}>
                                         <div className='w-12 h-12 bg-blue-500 rounded-full'/>
                                         <div className='px-3'>
                                             <p>{followedUser.username}</p>

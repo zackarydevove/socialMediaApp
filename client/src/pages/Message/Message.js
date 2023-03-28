@@ -13,42 +13,60 @@ import EmptyConversation from '../../components/Chat/EmptyConversation';
 import AddDM from '../../components/Chat/AddDM';
 import { createChat, getChats } from '../../api/chat';
 import { getUser } from '../../api/auth';
+import AddMember from '../../components/Chat/AddMember';
 
 // Message page, fetch user conversations and display them
 function Message() {
     const [openNav, setOpenNav] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
+    const [openAddMember, setOpenAddMember] = useState(false);
     const [updateMessagePage, setUpdateMessagePage] = useState(false);
     const [user, setUser] = useState({});
     const [chats, setChats] = useState([]);
     const [actualChatId, setActualChatId] = useState('');
+    const [messages, setMessages] = useState([]);
+    const [participants, setParticipants] = useState([]);
+
 
     useEffect(() => {
         getUser()
         .then((res) => setUser(res))
         .catch((err) => console.log(err));
-    }, [updateMessagePage])
-
+    }, [updateMessagePage, actualChatId])
+    
+    // GetChats sorted in last message
     useEffect(() => {
         getChats(user._id)
         .then((chatsIds) => { 
             setChats(chatsIds);
+            console.log('chats in message:', chats);
         })
         .catch((err) => console.log(err));
-    }, [user]);
+    }, [user, actualChatId]);
 
-    function onCreateChat(selectedUser) {
-        const participants = [user._id, selectedUser._id];
+    function onCreateChat(selectedUsers) {
+        const participants = [user._id, ...selectedUsers.map(user => user._id)];
         createChat(participants)
         .then((chat) => {
-            console.log('Chat correctly created');
+            setActualChatId(chat);
             setUpdateMessagePage(!updateMessagePage);
         })
-        .catch((err) => console.log(err));
+        .catch((chat) => {
+        });
       }
 
       return (
-        <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+        <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+            {
+                openAddMember ?
+                < AddMember 
+                setOpenAddMember={setOpenAddMember}
+                user={user}
+                participants={participants}
+                setParticipants={setParticipants}
+                actualChatId={actualChatId}/>
+                : null
+            }
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -58,6 +76,8 @@ function Message() {
                 <Navbar openNav={openNav} setOpenNav={setOpenNav} />
             </div>
             }
+
+            
             <div className='max-sm:flex-grow relative sm:w-[388px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
                 <div className='sm:hidden'>
@@ -90,7 +110,9 @@ function Message() {
                         return (
                             <Contact 
                                 chatId={chatId}
-                                setActualChatId={setActualChatId}/>
+                                setActualChatId={setActualChatId}
+                                actualChatId={actualChatId}
+                                setMessages={setMessages}/>
                         )
                     })
                     : 'Loading...'
@@ -99,7 +121,16 @@ function Message() {
             <div className='max-lg:hidden'>
                 {
                     actualChatId ? 
-                    <Conversation actualChatId={actualChatId} currentUser={user}/>
+                    <Conversation 
+                        actualChatId={actualChatId}
+                        setActualChatId={setActualChatId} 
+                        currentUser={user}
+                        messages={messages}
+                        setMessages={setMessages} 
+                        setUpdateMessagePage={setUpdateMessagePage}
+                        setOpenAddMember={setOpenAddMember}
+                        participants={participants}
+                        setParticipants={setParticipants}/>
                     : <EmptyConversation />
                 }
             </div>
@@ -113,6 +144,7 @@ function Message() {
                     <FaEnvelope size={'1.5em'} className='hover:text-slate-500'/>
                 </div>
             </div>
+
         </div>
   )
 }

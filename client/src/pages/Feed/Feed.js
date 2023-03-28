@@ -21,7 +21,6 @@ function Feed() {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        console.log('step1 user._id:', user._id);
         if (user._id) {
             getFeed(user._id, page)
             .then((newPosts) => {
@@ -47,7 +46,7 @@ function Feed() {
     };
 
     return (
-        <div onScroll={handleScroll} className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+        <div onScroll={handleScroll} className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -57,7 +56,7 @@ function Feed() {
                 <Navbar openNav={openNav} setOpenNav={setOpenNav} />
             </div>
             }
-            <div className='max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
+            <div className='flex flex-col h-screen max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
                 <div className='sm:hidden'>
                     <PostTweetButton/>
@@ -76,7 +75,7 @@ function Feed() {
                 <div className='max-sm:hidden'>
                     <PostTweet />
                 </div>
-                <div>
+                <div className='flex-grow overflow-y-scroll scrollbar-hide'>
                     {
                     feedPosts ?
                         feedPosts.map((post, index) => (

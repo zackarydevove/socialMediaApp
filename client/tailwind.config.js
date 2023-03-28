@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       backgroundImage: {
         'login_bg': "url('./images/twitterbg.png')",
+      },
+      fontFamily: {
+        opensans: ['Opensans', 'sans-serif'],
       }
     },
   },

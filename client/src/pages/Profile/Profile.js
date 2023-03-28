@@ -52,7 +52,7 @@ function Profile() {
     console.log('In profile, userProfile:', userProfile);
 
     return (
-        <div className='flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+        <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav} update={update} setUpdate={setUpdate}/> 
@@ -62,7 +62,7 @@ function Profile() {
                 <Navbar openNav={openNav} setOpenNav={setOpenNav} update={update} setUpdate={setUpdate}/>
             </div>
             }
-            <div className='max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
+            <div className='flex flex-col max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
                 <div className='sm:hidden'>
                     <PostTweetButton update={update} setUpdate={setUpdate}/>
@@ -103,17 +103,19 @@ function Profile() {
                     </div>
                         <hr className='mt-2 border-t-[#2f3336] ' />
                 </div>
-    {userProfile && selected === "Tweets" && userProfile.post && (
-      userProfile.post.map((postId, index) => (
-        <TweetBlock
-          key={index}
-          username={userProfile.username}
-          postId={postId}
-          update={update}
-          setUpdate={setUpdate}
-        />
-      ))
-    )}
+                <div className='flex-grow overflow-y-scroll scrollbar-hide'>
+                    {userProfile && selected === "Tweets" && userProfile.post && (
+                      userProfile.post.map((postId, index) => (
+                        <TweetBlock
+                          key={index}
+                          username={userProfile.username}
+                          postId={postId}
+                          update={update}
+                          setUpdate={setUpdate}
+                        />
+                      ))
+                    )}
+                </div>
 
 {userProfile && selected === "Replies" && userProfile.replies && (
       userProfile.replies.map((postId, index) => (

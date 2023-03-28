@@ -18,10 +18,13 @@ export const createChat = (participants) => {
         return (res.data);
     })
     .catch((err) => {
+        if (err.response.request.status === 400) {
+            console.log('Chat already exists');
+            return err.response.data._id;
+        }
         console.log(err);
         return null;
     })
-
 }
 
 export const getChats = (userId) => {
@@ -31,7 +34,7 @@ export const getChats = (userId) => {
         url: `${API_URL}/${userId}`
     })
     .then((res) => {
-        console.log('All chats of users successfully received!', res);
+        console.log('All contacts of users successfully received!');
         return (res.data);
     })
     .catch((err) => {
@@ -40,14 +43,14 @@ export const getChats = (userId) => {
     })
 }
 
-export const getParticipant = (chatId) => {
+export const getParticipants = (chatId) => {
     return axios({
         method: 'GET',
         withCredentials: true,
-        url: `${API_URL}/participant/${chatId}`
+        url: `${API_URL}/participants/${chatId}`
     })
     .then((res) => {
-        console.log('Other participant successfully received!', res);
+        console.log('Other participants successfully received!');
         return (res.data);
     })
     .catch((err) => {
@@ -56,14 +59,14 @@ export const getParticipant = (chatId) => {
     })  
 }
 
-export const getMessages = (chatId) => {
+export const getMessages = (chatId, page) => {
     return axios({
         method: 'GET',
         withCredentials: true,
-        url: `${API_URL}/${chatId}/messages`
+        url: `${API_URL}/${chatId}/messages/${page}`
     })
     .then((res) => {
-        console.log('Messages of chat successfully received!', res);
+        console.log('Messages of chat successfully received!');
         return (res.data);
     })
     .catch((err) => {
@@ -83,23 +86,18 @@ export const sendMessage = (chatId, content, sender, receiver) => {
     });
 };
 
-// export const sendMessage = (chatId, content, sender, receiver) => {
-//     return axios({
-//         method: 'POST',
-//         data: {
-//             content: content,
-//             sender: sender,
-//             receiver: receiver,
-//         },
-//         withCredentials: true,
-//         url: `${API_URL}/${chatId}/message`
-//     })
-//     .then((res) => {
-//         console.log('Message successfully sent!', res);
-//         return (res.data);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//         return null;
-//     })  
-// }
+export const getLastMessage = (chatId) => {
+    return axios({
+        method: 'GET',
+        withCredentials: true,
+        url: `${API_URL}/${chatId}/lastmessage`
+    })
+    .then((res) => {
+        console.log('Last messages received!');
+        return (res.data);
+    })
+    .catch((err) => {
+        console.log(err);
+        return null;
+    })  
+}

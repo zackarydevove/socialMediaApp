@@ -4,9 +4,16 @@ import { BsCardImage, BsFillEmojiSmileFill } from 'react-icons/bs';
 import { AiOutlineFileGif } from 'react-icons/ai';
 import { useState } from 'react';
 import { postTweet } from '../../api/post';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 function Tweet(props) {
     const [content, setContent] = useState('');
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+    const addEmoji = (emoji) => {
+        setContent((prevContent) => prevContent + emoji.native);
+    };
 
     const handleClick = () => {
         postTweet(content);
@@ -40,9 +47,20 @@ function Tweet(props) {
                         <hr />
                         <div className='flex justify-between items-center pt-3'>
                             <div className='flex gap-5'>
-                                <BsCardImage size={'1.3em'} className='hover:cursor-pointer' />
-                                <AiOutlineFileGif size={'1.3em'} className='hover:cursor-pointer'/>
-                                <BsFillEmojiSmileFill size={'1.3em'} className='hover:cursor-pointer'/>
+                                <BsCardImage size={'1.3em'} className='text-gray-500' />
+                                <AiOutlineFileGif size={'1.3em'} className='text-gray-500'/>
+                                <div className='relative'>
+                                    <BsFillEmojiSmileFill size={'1.3em'} className='hover:cursor-pointer hover:text-blue-500'
+                                        onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
+                                    {showEmojiPicker && (
+                                        <div className='absolute z-30'>
+                                            <Picker
+                                                onEmojiSelect={addEmoji}
+                                                theme='dark'
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <button className='xl:pl-5 xl:pr-5 p-2 pl-3 pr-3 bg-blue-500 rounded-3xl'
                                 onClick={handleClick}>Tweet</button>
