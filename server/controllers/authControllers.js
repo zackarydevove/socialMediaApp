@@ -12,11 +12,28 @@ module.exports.googleCallback = passport.authenticate('google', {
     successRedirect: `${CLIENT_URL}/home`
     });
 
+module.exports.facebookAuth = passport.authenticate('facebook', { scope: ['profile'] });
+
+module.exports.facebookCallback = passport.authenticate('facebook', {
+    failureRedirect: `${CLIENT_URL}/`, 
+    successRedirect: `${CLIENT_URL}/home`
+    });
+
 module.exports.register = (req, res) => {
-    User.findOne({email: req.body.email})
+    User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] })
     .then((user) => {
         if (user) {
-            res.send('Email already used!');
+            if (user.email === req.body.email && user.username === req.body.username) {
+                console.log('Email and username already used');
+                res.send('Email and username already used');
+            }
+            else if (user.email === req.body.email) {
+                console.log('Email already used')
+                res.send('Email already used!');
+            } else if (user.username === req.body.username) {
+                console.log('Username already used');
+                res.send('Username already used');
+            }
         } else {
             if (req.body.password === req.body.confirmPassword) {
                 bcrypt.hash(req.body.password, 10)
@@ -49,7 +66,10 @@ module.exports.login = (req, res, next) => {
     console.log(req.body);
     passport.authenticate('local', (err, user, info) => {
         if (err) return (next(err));
-        if (!user) return (res.send('no user exists'));
+        if (!user) {
+            console.log('user not found');
+            return (res.send('no user exists'))
+        };
         req.logIn(user, (err) => {
             if (err) return (next(err));
             res.send('Successfully Authenticated');

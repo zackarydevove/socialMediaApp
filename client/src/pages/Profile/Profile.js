@@ -13,6 +13,7 @@ import Recommend from '../../components/More/Recommend';
 import Terms from '../../components/More/Terms';
 import ProfileInfo from '../../components/Profile/ProfileInfo';
 import { getUser, getProfile } from '../../api/auth';
+import Navbarsm from '../../components/More/Navbarsm';
 
 function Profile() {
     const [openNav, setOpenNav] = useState(false);
@@ -53,6 +54,7 @@ function Profile() {
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+            <Navbarsm />
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav} update={update} setUpdate={setUpdate}/> 
@@ -145,9 +147,7 @@ function Profile() {
       userProfile.retweet.map((postId, index) => (
         <TweetBlock
           key={index}
-          username={userProfile.username}
           postId={postId}
-          update={update}
           setUpdate={setUpdate}
         />
       ))
@@ -159,15 +159,6 @@ function Profile() {
                 <Recommend />
                 <Terms />
             </div>
-            <div className='sm:hidden'>
-                <hr className='border-t-[#2f3336]'/>
-                <div className='flex justify-around items-center p-3'>
-                    <BsFillHouseFill size={'1.5em'} className='hover:text-slate-500' />
-                    <ImSearch size={'1.5em'} className='hover:text-slate-500'/>
-                    <BsFillBellFill size={'1.5em'} className='hover:text-slate-500'/>
-                    <FaEnvelope size={'1.5em'} className='hover:text-slate-500'/>
-            </div>
-        </div>
     </div>
   )
 }

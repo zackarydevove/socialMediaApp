@@ -9,11 +9,9 @@ export const searchUsers = (query) => {
         url: `${API_URL}/users/${query}`
     })
     .then((res) => {
-        console.log(res.data);
         return res.data;
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })
 };

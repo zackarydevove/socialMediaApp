@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { root, login, logout, register, googleAuth, googleCallback, getUser, getProfile, getCreator, getRandom } = require("../controllers/authControllers");
+const { root, login, logout, register, googleAuth, googleCallback, facebookAuth, facebookCallback ,getUser, getProfile, getCreator, getRandom } = require("../controllers/authControllers");
 
 router.get('/', root);
 
@@ -7,8 +7,11 @@ router.post('/login', login);
 router.post('/logout', logout);
 router.post('/register', register);
 
-router.get('/auth/google', googleAuth);
-router.get('/auth/google/callback', googleCallback);
+router.get('/google', googleAuth);
+router.get('/google/callback', googleCallback);
+
+router.get('/facebook', facebookAuth);
+router.get('/facebook/callback', facebookCallback);
 
 router.get('/user', getUser);
 router.get('/user/profile/:username', getProfile)

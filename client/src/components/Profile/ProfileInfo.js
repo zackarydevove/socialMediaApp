@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { follow } from '../../api/follow';
 import { joinedDate } from '../../utils/joinedDate';
+import { updateUser } from '../../api/user';
 
 function ProfileInfo({
     currentUser = null, 
@@ -13,6 +14,13 @@ function ProfileInfo({
     setUpdate = null
 }) {
     const [isHovered, setIsHovered] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
+    const [banner, setBanner] = useState(userProfile.banner || '')
+    const [picture, setPicture] = useState(userProfile.picture || '')
+    const [twitterName, setTwitterName] = useState(userProfile.twittername || userProfile.username)
+    const [description, setDescription] = useState(userProfile.description || '')
+    const [link, setLink] = useState(userProfile.link || '')
+
 
     const navigate = useNavigate();
 
@@ -34,6 +42,15 @@ function ProfileInfo({
         })
         .catch((err) => console.log(err));
     }
+
+    const handleEdit = () => {
+        console.log('twitterName, description, link', twitterName, description, link);
+        setEditOpen(false)
+        updateUser(userProfile._id, twitterName, description, link)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
+
    
   return (
     <div>
@@ -51,7 +68,14 @@ function ProfileInfo({
                 {
                     currentUser.username === userProfile.username 
                     ? 
-                        <button className="h-[36px] pl-4 pr-4 rounded-full border border-[#666666]">Edit Profile</button>
+                    (
+                        editOpen === true ? 
+                        <button className="h-[36px] pl-4 pr-4 rounded-full border border-[#666666]"
+                            onClick={handleEdit}>Confirm</button>
+                        :
+                        <button className="h-[36px] pl-4 pr-4 rounded-full border border-[#666666]"
+                            onClick={() => setEditOpen(true)}>Edit Profile</button>
+                    )
                     : 
                         currentUser?.follow?.users?.some((userId) => userId?.toString() === userProfile._id?.toString())
                             ? 
@@ -67,20 +91,23 @@ function ProfileInfo({
             </div>
             {/* Name */}
             <div>
-                <h1 className='text-xl pt-3'>{userProfile.username}</h1>
+                <input className='outline-none bg-black text-xl pt-3' readOnly={!editOpen} 
+                    onChange={(e) => setTwitterName(e.target.value)} value={twitterName}></input>
                 <p className='text-gray-500'>@{userProfile.username}</p>
             </div>
             {/* Bio */}
             <div className='pt-3'>
-                <p>Fullstack Software Engineer | React | Redux | Tailwind | Node | Express | MongoDB | PostgreSQL | REST API | GraphQL | Git | Docker | C/C++ | Solidity</p>
+                <input className='outline-none bg-black' readOnly={!editOpen} 
+                    onChange={(e) => setDescription(e.target.value)} value={description}></input>
             </div>
             {/* Links */}
             <div className='flex items-center gap-3 pt-3'>
                 <div className='text-gray-500 flex items-center gap-1'>
                     <AiOutlineLink size={'1.3em'}/>
-                    <a className='text-blue-400'>github.com/abc</a>
+                    <input className=' outline-none text-blue-400 hover:cursor-pointer bg-black border ' readOnly={!editOpen}
+                        onChange={(e) => setLink(e.target.value)} target="_blank" value={link}></input>
                 </div>
-                <div className='text-gray-500 flex items-center gap-2'>
+                <div className='text-gray-500 flex items-center gap-2 border'>
                     <BsCalendar2Week />
                     <p>Joined {joinedDate(userProfile.createdAt)}</p>
                 </div>

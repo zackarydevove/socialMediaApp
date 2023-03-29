@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import socket from '../../socket';
 import ChatInfo from './ChatInfo';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineArrowLeft } from 'react-icons/ai'
 
 // One conversation/chat, fetch the messages and show them in Chat, send Messages aswell
 function Conversation({actualChatId, setActualChatId, currentUser, messages, setMessages, setUpdateMessagePage, setOpenAddMember, participants, setParticipants}) {
@@ -67,7 +68,7 @@ function Conversation({actualChatId, setActualChatId, currentUser, messages, set
       })
 
       socket.on('joined_chat', (chatId, userIds) => {
-        setParticipants((prev) => [...prev, ...userIds])
+        setParticipants((prev) => [...prev, ...userIds]);
         setUpdateMessagePage((prev) => !prev);
       })
     
@@ -127,7 +128,7 @@ function Conversation({actualChatId, setActualChatId, currentUser, messages, set
   console.log(openChatInfo)
 
   return (
-    <div className='w-[600px] h-full flex flex-col border-r border-r-[#2f3336]'>
+    <div className='w-screen max-w-[600px] h-full flex flex-col border-r border-r-[#2f3336]'>
             {
               openChatInfo ? (
                 <ChatInfo  
@@ -136,20 +137,25 @@ function Conversation({actualChatId, setActualChatId, currentUser, messages, set
                   participants={participants}
                   currentUser={currentUser}
                   actualChatId={actualChatId}
-                  setOpenAddMember={setOpenAddMember}/>
+                  setOpenAddMember={setOpenAddMember}
+                  setActualChatId={setActualChatId}
+                  setMessages={setMessages}/>
                 ) : (
                   <>
                   {/* Up: Profile information */}
                   <div className='flex justify-between p-2 items-center'>
                     <div className='flex items-center gap-2'>
                         {/* Profile Picture */}
+
+                        < AiOutlineArrowLeft size={'1.5em'} onClick={() => setActualChatId('')}
+                          className='lg:hidden'/>
+                        <div className='w-8 h-8 bg-blue-600 rounded-full'/>
                         {/* Name */}
                         {
                           participants && participants.length > 0 &&
                           participants.map((participant, index) => (
                             <div className='flex items-center gap-2 hover:cursor-pointer'
                               onClick={() => navigate(`/profile/${participant.username}`)}>
-                              <div className='w-8 h-8 bg-blue-600 rounded-full'/>
                               <p key={index}>{participant.username} {participants.length > 1 && index < participants.length - 1 ? ',' : ''}</p>
                             </div>
                           ))

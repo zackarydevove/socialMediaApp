@@ -20,8 +20,8 @@ function Navbar(props) {
 
   useEffect(() => {
     getUser()
-        .then((res) => setUser(res))
-        .catch((err) => console.log('Error during fetching user', err));
+    .then((res) => setUser(res))
+    .catch((err) => console.log('Error during fetching user', err));
   }, [])
 
   const handleLogout = () => {
@@ -35,7 +35,7 @@ function Navbar(props) {
   }
 
   return (
-      <div className='xl:w-[275px] w-[280px] sm:w-[88px] h-screen border-r border-r-[#2f3336] max-sm:absolute max-sm:z-10 bg-black'>
+      <div className='xl:w-[275px] w-[280px] sm:w-[88px] h-screen border-r border-r-[#2f3336] max-sm:absolute max-sm:z-50 bg-black '>
         {/* Account info */}
         { openTwitterBlue ?
           <TwitterBlue setOpenTwitterBlue={setOpenTwitterBlue} />
@@ -101,7 +101,16 @@ function Navbar(props) {
               <h1 className='text-xl sm:hidden xl:block'>Explore</h1>
             </div>
             <div className='h-14 flex items-center p-3 gap-5 max-xl:hover:bg-slate-900 hover:cursor-pointer' onClick={() => navigate('/notification')}>
-              <BsFillBellFill  size={'1.4em'} />
+              <div className='relative'>
+                {
+                  user?.notificationCount > 0 ? 
+                  <div className='absolute rounded-full bg-blue-500 w-4 h-4 -top-2 -right-1 flex justify-center items-center border border-black'>
+                    <p className='text-xs'>{user.notificationCount}</p>
+                  </div>
+                  : null
+                }
+                <BsFillBellFill  size={'1.4em'} />
+              </div>
               <h1 className='text-xl sm:hidden xl:block'>Notifications</h1>
             </div>
             <div className='h-14 flex items-center p-3 gap-5 max-xl:hover:bg-slate-900 hover:cursor-pointer' onClick={() => navigate('/message')}>

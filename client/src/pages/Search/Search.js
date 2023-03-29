@@ -12,6 +12,7 @@ import Recommend from '../../components/More/Recommend';
 import Terms from '../../components/More/Terms';
 import UserCard from '../../components/Search/UserCard';
 // import { searchUsers } from '../../api/search';
+import Navbarsm from '../../components/More/Navbarsm';
 
 function Search() {
     const [openNav, setOpenNav] = useState(false);
@@ -39,6 +40,7 @@ function Search() {
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+            <Navbarsm />
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -66,15 +68,6 @@ function Search() {
                 <Recommend SearchPage={true} />
                 <Terms />
             </div>
-            <div className='sm:hidden'>
-                <hr className='border-t-[#2f3336]'/>
-                <div className='flex justify-around items-center p-3'>
-                    <BsFillHouseFill size={'1.5em'} className='hover:text-slate-500' />
-                    <ImSearch size={'1.5em'} className='hover:text-slate-500'/>
-                    <BsFillBellFill size={'1.5em'} className='hover:text-slate-500'/>
-                    <FaEnvelope size={'1.5em'} className='hover:text-slate-500'/>
-            </div>
-        </div>
     </div>
   )
 }

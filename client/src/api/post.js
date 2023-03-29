@@ -17,7 +17,6 @@ export const postTweet = (content) => {
         return res.data
     })
     .catch((err) => {
-        console.log(err);
         return null
     });
 };
@@ -35,7 +34,6 @@ export const getPost = (postId) => {
         return (res.data);
       })
       .catch((err) => {
-        console.log(err);
         return null
       })
 }
@@ -52,13 +50,11 @@ export const likeTweet = (postId) => {
         return (res.data)
     })
     .catch((err) => {
-        console.log(err);
         return null
     })
 }
 
 export const deleteTweet = (postId) => {
-    console.log('dans la fonction deleteTweet, jai cette id', postId)
     return axios({
         method: 'DELETE',
         withCredentials: true,
@@ -67,7 +63,6 @@ export const deleteTweet = (postId) => {
         return (res.data);
     })
     .catch((err) => {
-        console.log(err); 
         return null
     })
 }
@@ -83,11 +78,9 @@ export const replyTweet = (postId, replyContent) => {
         url: `${API_URL}/reply`
     })
     .then((res) => {
-        console.log('Reply sent');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null
     })
 };
@@ -102,11 +95,9 @@ export const retweet = (postId) => {
         url: `${API_URL}/retweet`
     })
     .then((res) => {
-        console.log('Retweet successful');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })
 }
@@ -121,11 +112,9 @@ export const bookmark = (postId) => {
         url: `${API_URL}/bookmark`
     })
     .then((res) => {
-        console.log('Bookmark successful');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null
     })
 }

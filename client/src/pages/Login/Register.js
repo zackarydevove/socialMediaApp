@@ -10,6 +10,8 @@ function Register(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [emailUsed, setEmailUsed] = useState(false);
+    const [usernameUsed, setUsernameUsed] = useState(false);
 
     const navigate = useNavigate();
 
@@ -18,6 +20,16 @@ function Register(props) {
         .then((res) => {
             if (res === 'User successfully created and authenticated') {
                 navigate('/home');
+            }
+            else if (res === 'Email and username already used') {
+                setEmailUsed(true);
+                setUsernameUsed(true);
+            }
+            else if (res === 'Email already used!') {
+                setEmailUsed(true);
+            }
+            else if (res === 'Username already used') {
+                setUsernameUsed(true);
             }
         })
         .catch((err) => console.log('Error during sign up', err));
@@ -39,25 +51,53 @@ function Register(props) {
                     {/* Credentials */}
                     <div className='flex flex-col gap-3'>
                         {/* Username */}
-                        <div className='h-14 w-[300px] border flex p-3'>
+                        <div className={`h-14 w-[300px] border ${usernameUsed ? 'border-red-500' : ''} flex p-3`}>
                             <input type='username' placeholder='Username' value={username}
-                             onChange={(e) => setUsername(e.target.value)}></input>
+                             onChange={(e) => {
+                                setUsername(e.target.value);
+                                setUsernameUsed(false);
+                            }}
+                             ></input>
                         </div>
+                        {
+                            usernameUsed ?
+                            <div>
+                                <p className='text-red-500'>Username already used</p>
+                            </div>
+                            : null
+                        }
                         {/* Email */}
-                        <div className='h-14 w-[300px] border flex p-3'>
+                        <div className={`h-14 w-[300px] border ${emailUsed ? 'border-red-500' : ''} flex p-3`}>
                             <input type='email' placeholder='Email' value={email}
-                             onChange={(e) => setEmail(e.target.value)}></input>
+                             onChange={(e) => {
+                                setEmail(e.target.value);
+                                setEmailUsed(false);
+                             }}></input>
                         </div>
+                        {
+                            emailUsed ?
+                            <div>
+                                <p className='text-red-500'>Email already used</p>
+                            </div>
+                            : null
+                        }
                         {/* Password */}
-                        <div className='h-14 w-[300px] border flex p-3' value={password}
+                        <div className={`h-14 w-[300px] border flex p-3 ${password !== confirmPassword ? 'border-red-500' : ''}`} value={password}
                              onChange={(e) => setPassword(e.target.value)}>
                             <input type='password' placeholder='Password'></input>
                         </div>
                         {/* Confirm Password */}
-                        <div className='h-14 w-[300px] border flex p-3' value={confirmPassword}
+                        <div className={`h-14 w-[300px] border flex p-3 ${password !== confirmPassword ? 'border-red-500' : ''}`} value={confirmPassword}
                              onChange={(e) => setConfirmPassword(e.target.value)}>
                             <input type='password' placeholder='Confirm password'></input>
                         </div>
+                        {
+                            password !== confirmPassword ?
+                            <div>
+                                <p className='text-red-500'>Passwords doesnt match</p>
+                            </div>
+                            : null
+                        }
                     </div>
 
                     {/* Register button */}

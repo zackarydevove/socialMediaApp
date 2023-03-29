@@ -14,15 +14,12 @@ export const createChat = (participants) => {
         url: `${API_URL}/`
     })
     .then((res) => {
-        console.log('Chat successfully created!', res);
         return (res.data);
     })
     .catch((err) => {
         if (err.response.request.status === 400) {
-            console.log('Chat already exists');
             return err.response.data._id;
         }
-        console.log(err);
         return null;
     })
 }
@@ -34,11 +31,9 @@ export const getChats = (userId) => {
         url: `${API_URL}/${userId}`
     })
     .then((res) => {
-        console.log('All contacts of users successfully received!');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })
 }
@@ -50,11 +45,9 @@ export const getParticipants = (chatId) => {
         url: `${API_URL}/participants/${chatId}`
     })
     .then((res) => {
-        console.log('Other participants successfully received!');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })  
 }
@@ -66,11 +59,9 @@ export const getMessages = (chatId, page) => {
         url: `${API_URL}/${chatId}/messages/${page}`
     })
     .then((res) => {
-        console.log('Messages of chat successfully received!');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })  
 }
@@ -93,11 +84,9 @@ export const getLastMessage = (chatId) => {
         url: `${API_URL}/${chatId}/lastmessage`
     })
     .then((res) => {
-        console.log('Last messages received!');
         return (res.data);
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })  
 }

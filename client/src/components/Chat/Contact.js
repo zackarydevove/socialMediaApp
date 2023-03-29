@@ -23,7 +23,7 @@ function Contact({chatId, setActualChatId, actualChatId, setMessages}) {
   }, []);
 
   return (
-    <div className={`flex p-3 ${chatId === actualChatId ? 'border-r-2 border-r-blue-600' : null} hover:bg-[#16181c] hover:cursor-pointer`}
+    <div className={`flex p-3 ${chatId === actualChatId ? 'border-r-2 border-r-blue-600' : null} hover:bg-[#16181c] hover:cursor-pointer `}
       onClick={() => {
         setActualChatId(chatId);
         setMessages([]);
@@ -37,12 +37,12 @@ function Contact({chatId, setActualChatId, actualChatId, setMessages}) {
         <div className='w-full'>
           <div className='w-full flex  px-3'>
             
-              <div className='flex gap-1'>
+              <div className='flex gap-1 '>
               {
                 participants ?
                 participants.map((participant, index) => {
                   return (
-                  <div key={index} className='flex gap-1 '>
+                  <div key={index} className='flex gap-1  '>
                       <p>{participant.username} 
                       {participants.length > 1 && index < participants.length - 1 ? ',' : ''} </p>
                       {

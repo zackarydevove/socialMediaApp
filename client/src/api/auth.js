@@ -16,7 +16,6 @@ export const login = (usernameOrEmail, password) => {
         return (res.data);
     })
     .catch((err) => {
-        console.error('Error during login:', err);
         return null;
     })
 };
@@ -35,7 +34,6 @@ export const register = (username, email, password, confirmPassword) => {
     }).then((res) => {
         return (res.data);
     }).catch((err) => {
-        console.error('Error during login:', err);
         return null;
     });
 }
@@ -48,7 +46,6 @@ export const logout = () => {
     }).then((res) => {
         return (res.data);
     }).catch((err) => {
-        console.log(err);
         return null;
     });
 }
@@ -62,7 +59,6 @@ export const getUser = () => {
     }).then((res) => {
         return (res.data);
     }).catch((err) => {
-        console.log(err);
         return null;
     });
 }
@@ -76,23 +72,19 @@ export const getProfile = (username) => {
         return (res.data)
     })
     .catch((err) => {
-        console.log(err);
         return null;
     });
 }
 
 export const getCreator = (creatorId) => {
-    console.log('getcreator creatorid: ', creatorId);
     return axios({
         method: 'GET',
         withCredentials: true,
         url:  `${API_URL}/user/creator/${creatorId}`,
     }).then((res) => {
-        console.log('getCreator res:', res);
         return (res.data)
     })
     .catch((err) => {
-        console.log(err);
         return null;
     });
 }
@@ -103,11 +95,9 @@ export const getRandomUsers = () => {
         withCredentials: true,
         url:  `${API_URL}/user/random`,
     }).then((res) => {
-        console.log('getRandom res:', res);
         return (res.data)
     })
     .catch((err) => {
-        console.log(err);
         return null;
     });
 }

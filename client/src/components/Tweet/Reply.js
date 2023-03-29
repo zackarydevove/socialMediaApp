@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { replyTweet } from '../../api/post';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import socket from '../../socket';
 
 function Reply(props) {
     const [content, setContent] = useState('');
@@ -17,8 +18,8 @@ function Reply(props) {
 
     const handleReply = () => {
         replyTweet(props.post._id, content)
-        .then((res) => {
-            
+        .then((reply) => {
+            socket.emit('reply', { fromUser: props.user._id, postId: reply._id });
         })
         .catch((err) => console.log(err));
         props.setOpenReply(false);

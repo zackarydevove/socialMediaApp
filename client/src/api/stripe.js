@@ -12,7 +12,7 @@ export const checkout = (plan) => {
     } else {
         item = {
             name: 'Twitter blue billed monthly',
-            price: 8400
+            price: 800
         }
 
     }
@@ -25,11 +25,9 @@ export const checkout = (plan) => {
         url: `${API_URL}/checkout`
     })
     .then((res) => {
-        console.log(res.data);
         return res.data;
     })
     .catch((err) => {
-        console.log(err);
         return null;
     })
 }

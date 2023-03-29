@@ -7,7 +7,12 @@ import { postTweet } from '../../api/post';
 import SearchUserToDm from './SearchUserToDm';
 import { getFollowedUsers } from '../../api/follow';
 
-function AddDM({openSearch, setOpenSearch, onCreateChat, user}) {
+function AddDM({
+    openSearch, 
+    setOpenSearch, 
+    onCreateChat, 
+    user,
+}) {
     const [followedUsers, setFollowedUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

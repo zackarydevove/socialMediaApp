@@ -2,6 +2,7 @@ const socketIO = require('socket.io');
 const Message = require('../models/MessageModel');
 const Chat = require('../models/ChatModel');
 const User = require('../models/UserModel');
+const Post = require('../models/PostModel');
 
 const configureSockets = (server) => {
   const io = socketIO(server, {
@@ -18,6 +19,11 @@ const configureSockets = (server) => {
       socket.join(chatId);
       console.log(`Socket ${socket.id} joined room ${chatId}`);
     });
+
+    socket.on('join_notification', (userId) => {
+      socket.join(userId);
+      console.log(`Socket ${socket.id} joined notification ${userId}`)
+    })
 
     socket.on('send_message', (data) => {
         const newMessage = new Message({
@@ -167,6 +173,7 @@ const configureSockets = (server) => {
     socket.on('disconnect', () => {
       console.log('Client disconnected:', socket.id);
     });
+
   });
 
   return io;

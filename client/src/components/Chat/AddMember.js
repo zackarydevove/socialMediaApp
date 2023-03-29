@@ -7,7 +7,12 @@ import { getFollowedUsers } from '../../api/follow';
 import { getParticipants } from '../../api/chat';
 import socket from '../../socket';
 
-function AddMember({setOpenAddMember, user, participants, setParticipants, actualChatId}) {
+function AddMember({
+    setOpenAddMember, 
+    user, 
+    participants, 
+    actualChatId,
+}) {
     const [followedUsers, setFollowedUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]); // Change to array for groups chat
@@ -54,13 +59,13 @@ function AddMember({setOpenAddMember, user, participants, setParticipants, actua
       );
   };
 
-  const handleAddNewMembers = () => {
-    if (selectedUsers.length > 0) {
-      const userIds = selectedUsers.map((user) => user._id);
-      socket.emit('invite_users', { chatId: actualChatId, userIds });
-      setOpenAddMember(false);
-    }
-  };
+    const handleAddNewMembers = () => {
+        if (selectedUsers.length > 0) {
+            const userIds = selectedUsers.map((user) => user._id);
+            socket.emit('invite_users', { chatId: actualChatId, userIds });
+            setOpenAddMember(false);
+        }
+  } ;
 
   return (
     <div className='z-40 fixed left-0 top-0 md:w-screen md:h-screen bg-blue-300 bg-opacity-20'>

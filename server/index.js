@@ -10,6 +10,7 @@ const feedRoutes = require('./routes/feed');
 const chatRoutes = require('./routes/chat');
 const searchRoutes = require('./routes/search');
 const stripeRoutes = require('./routes/stripe');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/feed', feedRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/user', userRoutes);
 
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

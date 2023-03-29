@@ -9,31 +9,33 @@ import Reply from './Reply';
 import { getUser, getCreator } from '../../api/auth';
 import { getPost, likeTweet, deleteTweet, retweet, bookmark } from '../../api/post';
 import { tweetCreatedDate } from '../../utils/tweetCreatedDate';
+import socket from '../../socket';
 
-function TweetBlock(props) {
+function TweetBlock({postId, setUpdate}) {
     const [user, setUser] = useState({});
-    const [post, setPost] = useState(props.post || {});
+    const [post, setPost] = useState({});
     const [creator, setCreator] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [openOptions, setOpenOptions] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     const navigate = useNavigate();
 
     // Get the post
     useEffect(() => {
-        if (props.postId) {
-            getPost(props.postId)
+        console.log('postId in tweetblock:', postId);
+        if (postId) {
+            getPost(postId)
             .then((res) => setPost(res))
             .catch((err) => console.log('Error while getting tweet', err));
         } else {
-            setPost(props.post || {});
+            setPost({});
         }
-    }, [])
+    }, [postId, refresh]);
 
     // Get the creator of the post
     useEffect(() => {
-        console.log('post creator:', post.creator);
         getCreator(post.creator)
         .then((res) => setCreator(res))
         .catch((err) => console.log(err));
@@ -46,33 +48,40 @@ function TweetBlock(props) {
         .catch((err) => console.log('Error during fetching user', err));
     }, [post]);
 
+    // Like
     const handleLikeTweet = () => {
-        likeTweet(props.postId)
-        .then((res) => setPost(res))
+        likeTweet(postId)
+        .then((res) => {
+            setRefresh((prev) => !prev);
+        })
         .catch((err) => console.log('Error during like', err));
     }
 
+    // Delete
     const handleDeleteTweet = () => {
-        console.log('DELETE THIS ID:', props.postId);
-        deleteTweet(props.postId)
+        console.log('DELETE THIS ID:', postId);
+        deleteTweet(postId)
         .then((res) => {
             setPost({});
-            props.setUpdate(!props.update);
+            setUpdate((prev) => !prev); 
             setOpenDelete(false);
         })
         .catch((err) => console.log('Error during delete', err));
     }
-    
+
+    // Retweet
     const handleRetweet = () => {
-        retweet(props.postId)
+        retweet(postId)
         .then((res) => {
-            console.log('Retweet successful');
+            setRefresh((prev) => !prev);
+            socket.emit('retweet', { fromUser: user._id, postId: postId });
         })
         .catch((err) => console.log('Error during retweet', err));
     }
 
     const handleBookmark = () => {
-        bookmark(props.postId)
+        console.log('postid bookmark:', postId)
+        bookmark(postId)
         .then((res) => {
             console.log('Bookmark successful');
         })
@@ -82,7 +91,7 @@ function TweetBlock(props) {
     return (
         <div className='font-opensans hover:cursor-pointer relative'>
     
-            { openReply ? <Reply post={post} openReply={openReply} setOpenReply={setOpenReply}/> : null }
+            { openReply ? <Reply user={user} post={post} openReply={openReply} setOpenReply={setOpenReply}/> : null }
     
             <div className='absolute h-full w-full'
                 onClick={() => navigate(`/tweet/${post._id}`)}>

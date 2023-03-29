@@ -86,8 +86,10 @@ module.exports.deletePost = (req, res) => {
 };
 
 module.exports.like = (req, res) => {
+    // Find post liked
     Post.findOne({_id: req.body.postId})
     .then((post) => {
+        // Find user who liked
         User.findOne(req.user._id)
         .then((user) => {
             if (post.likes.users.includes(user._id)) {
@@ -98,12 +100,34 @@ module.exports.like = (req, res) => {
                 console.log('Post', post._id ,'unliked by', user._id, '\n');
                 res.send('Post successfully unliked')
             } else {
-                post.likes.users.unshift(user._id);
-                post.likes.count += 1;
-                user.likes.unshift(post._id);
-                post.save().then(() => user.save())
-                console.log('Post', post._id ,'liked by', user._id, '\n');
-                res.send('Post successfully liked');
+                // Find creator to create notification
+                User.findOne(post.creator)
+                .then((creator) => {
+                    creator.notificationCount = creator.notificationCount || 0;
+                    creator.notificationCount += 1;
+                    creator.notifications.unshift({
+                        type: 'like',
+                        fromUser: user._id,
+                        post: post._id,
+                    })
+                    creator.save()
+                    .then(() => {
+                        post.likes.users.unshift(user._id);
+                        post.likes.count += 1;
+                        user.likes.unshift(post._id);
+                        post.save().then(() => user.save())
+                        console.log('Post', post._id ,'liked by', user._id, '\n');
+                        res.send('Post successfully liked');
+                    })
+                    .catch((err) =>  {
+                        res.send('Error while saving creator');
+                        console.log(err);
+                    });
+                })
+                .catch((err) =>  {
+                    res.send('Creator not found');
+                    console.log(err);
+                });
             }
         })
         .catch((err) => {
@@ -114,12 +138,14 @@ module.exports.like = (req, res) => {
     .catch((err) => {
         res.send('Post not found');
         console.log(err);
-    })
-}
+    });
+};
 
 module.exports.reply = (req, res) => {
+    // Find post replied
     Post.findOne({_id: req.body.postId})
     .then((post) => {
+        // Find user who replied
         User.findOne(req.user._id)
         .then((user) => {
             const newReply = new Post({
@@ -139,11 +165,28 @@ module.exports.reply = (req, res) => {
                 .then(() => {
                     user.save()
                     .then(() => {
-                        console.log('user', user, 'successfully replied to', post._id, '\n');
-                        res.send('Successfully replied\n')
+                        // Find creator to create notification
+                        User.findOne(post.creator)
+                        .then((creator) => {
+                            creator.notificationCount = creator.notificationCount || 0;
+                            creator.notificationCount += 1;
+                            creator.notifications.unshift({
+                                type: 'reply',
+                                fromUser: user._id,
+                                post: reply._id,
+                            })
+                            creator.save()
+                            .then(() => {
+                                console.log('user', user, 'successfully replied to', post._id, '\n');
+                                res.send(reply);
+                            })
+                            .catch((err) => console.log(err, 'error while saving creator'));
+                        })
+                        .catch((err) => console.log(err));
                     })
                     .catch((err) => console.log(err));
-                });
+                })
+                .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
         })
@@ -157,8 +200,10 @@ module.exports.deleteReply = (req, res) => {
 }
 
 module.exports.retweet = (req, res) => {
+    // Find post retweeted
     Post.findOne({_id: req.body.postId})
     .then((post) => {
+        // Find user who retweeted
         User.findOne(req.user._id)
         .then((user) => {
             if (post.retweet.users.includes(user._id)) {
@@ -169,21 +214,36 @@ module.exports.retweet = (req, res) => {
                 console.log('Post', post._id ,'unretweeted by', user._id, '\n');
                 res.send('Post successfully unretweeted')
             } else {
-                post.retweet.users = post.retweet.users || [];
-                post.retweet.users.unshift(user._id);
-                post.retweet.count += 1;
-                user.retweet = user.retweet || [];
-                user.retweet.unshift(new mongoose.Types.ObjectId(post._id));
-                post.save()
-                .then(() => {
-                    user.save()
+                // Find creator to create notification
+                User.findOne(post.creator)
+                .then((creator) => {
+                    creator.notificationCount = creator.notificationCount || 0;
+                    creator.notificationCount += 1;
+                    creator.notifications.unshift({
+                        type: 'retweet',
+                        fromUser: user._id,
+                        post: post._id,
+                    })
+                    creator.save()
                     .then(() => {
-                        console.log('user', user, 'successfully retweeted', post._id, '\n');
-                        res.send('Successfully retweet\n')
+                        post.retweet.users = post.retweet.users || [];
+                        post.retweet.users.unshift(user._id);
+                        post.retweet.count += 1;
+                        user.retweet = user.retweet || [];
+                        user.retweet.unshift(new mongoose.Types.ObjectId(post._id));
+                        post.save()
+                        .then(() => {
+                            user.save()
+                            .then(() => {
+                                console.log('user', user, 'successfully retweeted', post._id, '\n');
+                                res.send('Successfully retweet\n')
+                            })
+                            .catch((err) => console.log(err));
+                        })
+                        .catch((err) => console.log(err));
                     })
                     .catch((err) => console.log(err));
                 })
-                .catch((err) => console.log(err));
             }
         })
         .catch((err) => console.log(err));
@@ -193,7 +253,9 @@ module.exports.retweet = (req, res) => {
 
 module.exports.bookmark = (req, res) => {
     const postId = req.body.postId;
-    User.findOne(req.user._id)
+    console.log('postid:', postId);
+    console.log('user:', req.user);
+    User.findById(req.user._id)
     .then((user) => {
         // If already bookmark, then delete bookmarks from user bookmarks
         if (user.bookmarks.includes(postId)) {

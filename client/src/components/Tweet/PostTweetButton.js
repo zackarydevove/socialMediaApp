@@ -7,7 +7,7 @@ function PostTweetButton(props) {
   const [openTweet, setOpenTweet] = useState(false);
 
     return (
-      <div className='sm:w-full max-sm:absolute max-sm:bottom-0 max-sm:right-0 max-sm:p-6'>
+      <div className='z-40 sm:w-full max-sm:absolute max-sm:bottom-10 max-sm:right-0 max-sm:p-6'>
         {
           openTweet ?
             <Tweet setOpenTweet={setOpenTweet} update={props.update} setUpdate={props.setUpdate}/>

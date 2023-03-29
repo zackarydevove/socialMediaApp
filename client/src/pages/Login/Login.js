@@ -9,6 +9,7 @@ import { login } from '../../api/auth';
 function Login(props) {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+    const [notValid, setNotValid] = useState(false);
 
     const navigate = useNavigate();
 
@@ -17,9 +18,19 @@ function Login(props) {
         .then((res) => {
             if (res === 'Successfully Authenticated') {
                 navigate('/home');
+            } else {
+                setNotValid(true);
             }
         })
         .catch((err) => console.log('Error during login', err));
+    }
+
+    const handleGoogleLogin = () => {
+        window.open('http://localhost:5000/api/auth/google', '_self');
+    }
+
+    const handleFacebookLogin = () => {
+        window.open('http://localhost:5000/api/auth/facebook', '_self');
     }
 
   return (
@@ -36,12 +47,14 @@ function Login(props) {
                 <h1 className='text-3xl font-bold'>Sign in to Twitter</h1>
             
                     {/* Google */}
-                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'>
+                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'
+                        onClick={handleGoogleLogin}>
                         <FcGoogle size={'1.3em'} />
                         <p>Sign up with Google</p>
                     </div>
                     {/* Meta */}
-                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'>
+                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'
+                        onClick={handleFacebookLogin}>
                         <BsMeta size={'1.3em'} />
                         <p>Sign up with Meta</p>
                     </div>
@@ -56,16 +69,25 @@ function Login(props) {
                     {/* Credentials */}
                     <div className='flex flex-col gap-3'>
                         {/* Username */}
-                        <div className='h-14 w-[300px] border flex p-3'>
+                        <div className={`h-14 w-[300px] border flex p-3 ${notValid ? 'border-red-500' : ''}`}>
                             <input type='text' placeholder='Email, or username' value={id}
                                 onChange={e => setId(e.target.value)}></input>
                         </div>
                         {/* Password */}
-                        <div className='h-14 w-[300px] border flex p-3'>
+                        <div className={`h-14 w-[300px] border flex p-3 ${notValid ? 'border-red-500' : ''}`}>
                             <input type='password' placeholder='Password' value={password}
                                 onChange={e => setPassword(e.target.value)}></input>
                         </div>
+                    {
+                        notValid ?
+                        <div>
+                            <p className='text-red-500 text-center'> Email, username or password incorrect</p>
+
+                        </div>
+                        : null
+                    }
                     </div>
+
 
                     {/* Login button */}
                     <div className='w-[300px] h-9 bg-black flex justify-center items-center rounded-3xl hover:cursor-pointer'

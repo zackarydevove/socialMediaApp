@@ -10,13 +10,17 @@ function ChatInfo(
      participants,
      currentUser,
      actualChatId,
-     setOpenAddMember}
+     setOpenAddMember,
+     setActualChatId,
+     setMessages}
   ) {
   const navigate = useNavigate();
 
   const handleLeaveChat = () => {
     socket.emit('quit_chat', { chatId: actualChatId, userId: currentUser._id });
     setOpenChatInfo(false);
+    setActualChatId('');
+    setMessages([]);
   }
 
   return (

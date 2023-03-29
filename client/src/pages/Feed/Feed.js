@@ -1,9 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { AiOutlineTwitter } from 'react-icons/ai'
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
 import PostTweet from '../../components/Tweet/PostTweet';
@@ -13,6 +10,7 @@ import Terms from '../../components/More/Terms';
 import TweetBlock from '../../components/Tweet/TweetBlock';
 import { getUser } from '../../api/auth';
 import { getFeed } from '../../api/feed';
+import Navbarsm from '../../components/More/Navbarsm';
 
 function Feed() {
     const [openNav, setOpenNav] = useState(false);
@@ -47,6 +45,7 @@ function Feed() {
 
     return (
         <div onScroll={handleScroll} className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+            <Navbarsm />
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -79,7 +78,7 @@ function Feed() {
                     {
                     feedPosts ?
                         feedPosts.map((post, index) => (
-                            <TweetBlock key={index} post={post} />
+                            <TweetBlock key={index} postId={post._id} />
                         ))
                     : null
                 }
@@ -91,15 +90,6 @@ function Feed() {
                 <Recommend />
                 <Terms />
             </div>
-            <div className='sm:hidden'>
-                <hr className='border-t-[#2f3336]'/>
-                <div className='flex justify-around items-center p-3'>
-                    <BsFillHouseFill size={'1.5em'} className='hover:text-slate-500' />
-                    <ImSearch size={'1.5em'} className='hover:text-slate-500'/>
-                    <BsFillBellFill size={'1.5em'} className='hover:text-slate-500'/>
-                    <FaEnvelope size={'1.5em'} className='hover:text-slate-500'/>
-            </div>
-        </div>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('../models/UserModel');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
@@ -28,21 +29,54 @@ const setupPassport = (app) => {
         new GoogleStrategy({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "/auth/google/callback",
+            callbackURL: "http://localhost:5000/api/auth/google/callback",
             scope: ['profile', 'email'],
         },
         function(accessToken, refreshToken, profile, cb) {
+            console.log('profile:', profile)
             User.findOne({ googleId: profile.id })
             .then((user) => {
                 if (user) {
                     return cb(null, user);
                 } else {
+                    const username = profile.name.givenName + profile.name.familyName;
                     const newUser = new User({
-                        email: profile.displayName,
+                        username: username,
                         googleId: profile.id
                     });
-                    console.log(profile.displayName);
-                    newUser.save();
+                    newUser.save()
+                    .then((savedUser) => {
+                        cb(null, savedUser);
+                    })
+                    .catch((err) => cb(err));
+                }
+            })
+            .catch((err) => cb(err));
+        }
+    ));
+
+    passport.use(
+        new FacebookStrategy({
+            clientID: process.env.FACEBOOK_APP_ID,
+            clientSecret: process.env.FACEBOOK_APP_SECRET,
+            callbackURL: "http://localhost:5000/api/auth/facebook/callback",
+        },
+        function(accessToken, refreshToken, profile, cb) {
+            console.log('profile:', profile)
+            User.findOne({ facebookId: profile.id })
+            .then((user) => {
+                if (user) {
+                    return cb(null, user);
+                } else {
+                    const newUser = new User({
+                        username: profile.displayName,
+                        facebookId: profile.id
+                    });
+                    newUser.save()
+                    .then((savedUser) => {
+                        cb(null, savedUser);
+                    })
+                    .catch((err) => cb(err));
                 }
             })
             .catch((err) => cb(err));

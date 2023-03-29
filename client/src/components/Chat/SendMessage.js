@@ -56,7 +56,7 @@ function SendMessage({chatId, sender, receiver, onSentMessage}) {
                     </div>
                     <input 
                         placeholder='Start a new message' 
-                        className='flex-grow bg-[#16181c]'
+                        className='flex-grow bg-[#16181c] w-1/2'
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onInput={handleTypingStart}

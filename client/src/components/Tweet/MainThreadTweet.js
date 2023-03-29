@@ -61,7 +61,6 @@ function MainThreadTweet(props) {
 
     return (
         <div className='hover:cursor-pointer relative'>
-    
             { openReply ? <Reply post={post} openReply={openReply} setOpenReply={setOpenReply}/> : null }
     
             <div className='absolute h-full w-full'

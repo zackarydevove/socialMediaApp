@@ -10,6 +10,7 @@ import Recommend from '../../components/More/Recommend';
 import Terms from '../../components/More/Terms';
 import { getUser } from '../../api/auth';
 import TweetBlock from '../../components/Tweet/TweetBlock';
+import Navbarsm from '../../components/More/Navbarsm';
 
 function Bookmarks() {
     const [openNav, setOpenNav] = useState(false);
@@ -25,6 +26,7 @@ function Bookmarks() {
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+            <Navbarsm />
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -47,13 +49,14 @@ function Bookmarks() {
                             <p className='text-sm text-gray-500'>@{user.username}</p>
                         </div>
                         {/* Right */}
-                        <BsThreeDots className='hover:cursor-pointer' />
+                        {/* <BsThreeDots className='hover:cursor-pointer' /> */}
                     </div>
                     <hr className='mt-2 border-t-[#2f3336]' />
                 </div>
                 <div>
                 {
                     user?.bookmarks?.map((postId, index) => {
+                        console.log('postid in bookmarks:', postId);
                         return (
                             <TweetBlock 
                             key={index}
@@ -70,15 +73,6 @@ function Bookmarks() {
                 <Recommend />
                 <Terms />
             </div>
-            <div className='sm:hidden'>
-                <hr className='border-t-[#2f3336]'/>
-                <div className='flex justify-around items-center p-3'>
-                    <BsFillHouseFill size={'1.5em'} className='hover:text-slate-500' />
-                    <ImSearch size={'1.5em'} className='hover:text-slate-500'/>
-                    <BsFillBellFill size={'1.5em'} className='hover:text-slate-500'/>
-                    <FaEnvelope size={'1.5em'} className='hover:text-slate-500'/>
-            </div>
-        </div>
     </div>
   )
 }

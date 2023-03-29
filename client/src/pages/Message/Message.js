@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
 import { BiMessageAdd } from 'react-icons/bi';
 import { ImSearch } from 'react-icons/im';
+import { AiOutlineArrowLeft } from 'react-icons/ai'
 import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
@@ -14,6 +15,9 @@ import AddDM from '../../components/Chat/AddDM';
 import { createChat, getChats } from '../../api/chat';
 import { getUser } from '../../api/auth';
 import AddMember from '../../components/Chat/AddMember';
+import { useNavigate } from 'react-router-dom';
+import Navbarsm from '../../components/More/Navbarsm';
+
 
 // Message page, fetch user conversations and display them
 function Message() {
@@ -27,6 +31,7 @@ function Message() {
     const [messages, setMessages] = useState([]);
     const [participants, setParticipants] = useState([]);
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         getUser()
@@ -44,26 +49,31 @@ function Message() {
         .catch((err) => console.log(err));
     }, [user, actualChatId]);
 
+
     function onCreateChat(selectedUsers) {
         const participants = [user._id, ...selectedUsers.map(user => user._id)];
         createChat(participants)
         .then((chat) => {
-            setActualChatId(chat);
-            setUpdateMessagePage(!updateMessagePage);
+            setParticipants([]);
+            setMessages([]);
+            setActualChatId(chat._id);
         })
-        .catch((chat) => {
-        });
+        .catch((err) => console.log(err));
       }
+
 
       return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
+            {
+                actualChatId ? null 
+                : <Navbarsm />
+             }
             {
                 openAddMember ?
                 < AddMember 
                 setOpenAddMember={setOpenAddMember}
                 user={user}
                 participants={participants}
-                setParticipants={setParticipants}
                 actualChatId={actualChatId}/>
                 : null
             }
@@ -78,49 +88,70 @@ function Message() {
             }
 
             
-            <div className='max-sm:flex-grow relative sm:w-[388px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
+            <div className='flex flex-col max-sm:flex-grow relative lg:min-w-[388px] sm:min-w-[590px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
-                <div className='sm:hidden'>
-                    <PostTweetButton/>
-                </div>
-                <div>
-                    <div className='flex justify-end sm:justify-between p-3'>
-                        <h1 className='max-sm:hidden text-xl font-bold'>Messages</h1>
-                        {/* onClick display the user's follow to dm */}
-                        <BiMessageAdd  size={'1.5em'} className='hover:cursor-pointer'
-                            onClick={() => setOpenSearch(true)} />
-                            {
-                                openSearch ?
-                                <AddDM 
-                                    openSearch={openSearch} 
-                                    setOpenSearch={setOpenSearch} 
-                                    onCreateChat={onCreateChat}
-                                    user={user}
-                                    />
-                                : null
-                            }
-                    </div>
-                    <div className='flex justify-center items-center'>
-                            <SearchBar SearchPage={true} placeHolder='Search Direct Messages'  />
-                    </div>
-                        <hr className='mt-2 border-t-[#2f3336] ' />
-                </div>
                 {
-                    chats ? chats.map((chatId) => {
-                        return (
-                            <Contact 
-                                chatId={chatId}
-                                setActualChatId={setActualChatId}
-                                actualChatId={actualChatId}
-                                setMessages={setMessages}/>
-                        )
-                    })
-                    : 'Loading...'
+                    window.innerWidth <= 1024 && actualChatId ?
+                    <div className='h-screen'>
+                        <Conversation 
+                            actualChatId={actualChatId}
+                            setActualChatId={setActualChatId} 
+                            currentUser={user}
+                            messages={messages}
+                            setMessages={setMessages} 
+                            setUpdateMessagePage={setUpdateMessagePage}
+                            setOpenAddMember={setOpenAddMember}
+                            participants={participants}
+                            setParticipants={setParticipants}/>
+                    </div>
+                    :
+                <div>
+                    <div className='sm:hidden'>
+                        <PostTweetButton/>
+                    </div>
+                    <div>
+                        <div className='flex justify-between  p-3 pb-0'>
+                            <div className='flex gap-2'>
+                                <AiOutlineArrowLeft size={'1.5em'} className='sm:hidden'
+                                    onClick={() => navigate(-1)}/>
+                                <h1 className='text-xl font-bold'>Messages</h1>
+                            </div>
+                            {/* onClick display the user's follow to dm */}
+                            <BiMessageAdd  size={'1.5em'} className='hover:cursor-pointer'
+                                onClick={() => setOpenSearch(true)} />
+                                {
+                                    openSearch ?
+                                    <AddDM 
+                                        openSearch={openSearch} 
+                                        setOpenSearch={setOpenSearch} 
+                                        onCreateChat={onCreateChat}
+                                        user={user}
+                                        />
+                                    : null
+                                }
+                        </div>
+                        <hr className='mt-2 border-t-[#2f3336]'/>
+                    </div>
+                    <div className='overflow-y-scroll max-sm:h-[80vh]'>
+                    {
+                        chats ? chats.map((chatId) => {
+                            return (
+                                <Contact 
+                                    chatId={chatId}
+                                    setActualChatId={setActualChatId}
+                                    actualChatId={actualChatId}
+                                    setMessages={setMessages}/>
+                            )
+                        })
+                        : 'Loading...'
+                    }
+                    </div>
+                </div>
                 }
             </div>
             <div className='max-lg:hidden'>
                 {
-                    actualChatId ? 
+                    window.innerWidth > 1024 && actualChatId ? 
                     <Conversation 
                         actualChatId={actualChatId}
                         setActualChatId={setActualChatId} 
@@ -135,15 +166,7 @@ function Message() {
                 }
             </div>
 
-            <div className='sm:hidden'>
-                <hr className='border-t-[#2f3336]'/>
-                <div className='flex justify-around items-center p-3'>
-                    <BsFillHouseFill size={'1.5em'} className='hover:text-slate-500' />
-                    <ImSearch size={'1.5em'} className='hover:text-slate-500'/>
-                    <BsFillBellFill size={'1.5em'} className='hover:text-slate-500'/>
-                    <FaEnvelope size={'1.5em'} className='hover:text-slate-500'/>
-                </div>
-            </div>
+
 
         </div>
   )
