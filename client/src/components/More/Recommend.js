@@ -1,11 +1,19 @@
 import React from 'react';
 import ProfileToFollow from '../Profile/ProfileToFollow';
-import { getRandomUsers } from '../../api/auth';
+import { getRandomUsers, getUser } from '../../api/auth';
 import { useEffect, useState } from 'react';
 
 function Recommend({SearchPage = false}) {
   const [randomUsers, setRandomUsers] = useState([]);
-  
+  const [currentUser, setCurrentUser] = useState({});
+  const [updateUser, setUpdateUser] = useState(false);
+
+  useEffect(() => {
+    getUser()
+    .then((res) => setCurrentUser(res))
+    .catch((err) => console.log(err));
+  }, [updateUser]);
+
   useEffect(() => {
     getRandomUsers()
     .then((res) => setRandomUsers(res))
@@ -19,7 +27,7 @@ function Recommend({SearchPage = false}) {
             <div className='flex flex-col gap-3'>
               {
                 randomUsers.map((user, index) => ( (
-                  <ProfileToFollow key={index} user={user}/>
+                  <ProfileToFollow key={index} user={user} currentUser={currentUser} setUpdateUser={setUpdateUser}/>
                 )))
               }
             </div>

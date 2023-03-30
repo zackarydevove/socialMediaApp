@@ -3,14 +3,14 @@ import { AiOutlinePlus } from 'react-icons/ai'
 import { useState } from 'react'
 import Tweet from './Tweet';
 
-function PostTweetButton(props) {
+function PostTweetButton({setUpdate}) {
   const [openTweet, setOpenTweet] = useState(false);
 
     return (
       <div className='z-40 sm:w-full max-sm:absolute max-sm:bottom-10 max-sm:right-0 max-sm:p-6'>
         {
           openTweet ?
-            <Tweet setOpenTweet={setOpenTweet} update={props.update} setUpdate={props.setUpdate}/>
+            <Tweet setOpenTweet={setOpenTweet} setUpdate={setUpdate}/>
           : null
         }
           <div className='xl:w-full xl:h-12 w-14 h-14 bg-blue-500 rounded-full flex justify-center items-center hover:bg-blue-600'

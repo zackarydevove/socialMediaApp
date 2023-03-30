@@ -6,7 +6,7 @@ import { postTweet } from '../../api/post';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
-function PostTweet() {
+function PostTweet({setUpdate}) {
     const [content, setContent] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -19,7 +19,7 @@ function PostTweet() {
         <div className='flex p-2'>
             {/* left */}
             <div className='mr-2'>
-                    <div className='w-12 h-12 bg-blue-800 rounded-full'/>
+                    <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
             </div>
 
             {/* right */}
@@ -48,7 +48,10 @@ function PostTweet() {
                         </div>
                     </div>
                     <button className='xl:pl-5 xl:pr-5 p-2 pl-3 pr-3 bg-blue-500 rounded-3xl'
-                        onClick={() => postTweet(content)}>Tweet</button>
+                        onClick={() => {
+                            postTweet(content)
+                            setUpdate(prev => !prev);
+                        }}>Tweet</button>
                 </div>
 
             </div>

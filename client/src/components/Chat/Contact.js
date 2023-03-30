@@ -30,7 +30,7 @@ function Contact({chatId, setActualChatId, actualChatId, setMessages}) {
       }}>
         {/* Left: Profile picture */}
       <div>
-        <div className='h-12 w-12 bg-blue-500 rounded-full'/>
+        <div className='h-12 w-12 bg-pp bg-cover rounded-full'/>
       </div>
       {/* Right: Name and options */}
         {/* Up */}
@@ -43,7 +43,7 @@ function Contact({chatId, setActualChatId, actualChatId, setMessages}) {
                 participants.map((participant, index) => {
                   return (
                   <div key={index} className='flex gap-1  '>
-                      <p>{participant.username} 
+                      <p>{participant.twittername} 
                       {participants.length > 1 && index < participants.length - 1 ? ',' : ''} </p>
                       {
                         participants.length === 1 ? <p className='text-gray-500 text-ellipsis'>@{participant.username} </p> : null

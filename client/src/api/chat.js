@@ -1,7 +1,7 @@
 import axios from "axios";
 import socket from "../socket";
 
-const API_URL = 'http://localhost:5000/api/chat';
+const API_URL = `${process.env.REACT_APP_API_URL}/chat`;
 
 
 export const createChat = (participants) => {

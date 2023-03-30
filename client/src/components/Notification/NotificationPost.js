@@ -52,8 +52,9 @@ function NotificationPost({notification}) {
         {/* Right: Information of action */}
         <div className='flex flex-col gap-3 pl-3'>
           {/* First row: Profile picture */}
-          <div className='flex'>
-            <div className='w-8 h-8 rounded-full bg-blue-600'/>
+          <div className='flex hover:cursor-pointer'
+            onClick={() => navigate(`/profile/${fromUser.username}`)}>
+            <div className='w-8 h-8 rounded-full bg-pp bg-cover'/>
           </div>
           {/* Second row: Name and action */}
           <div className='flex gap-1'>
@@ -74,7 +75,7 @@ function NotificationPost({notification}) {
             }
           </div>
           {/* Third Row: Tweet */}
-          <div onClick={() => navigate(`/tweet/${post._id}`)}>
+          <div onClick={() => navigate(`/tweet/${post._id}`)} className="hover:cursor-pointer">
             <p className='text-gray-500'>{post.content}</p>
           </div>
 

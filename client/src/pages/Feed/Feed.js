@@ -15,10 +15,12 @@ import Navbarsm from '../../components/More/Navbarsm';
 function Feed() {
     const [openNav, setOpenNav] = useState(false);
     const [user, setUser] = useState({});
+    const [update, setUpdate] = useState(false);
     const [feedPosts, setFeedPosts] = useState([]);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
+        setFeedPosts([]);
         if (user._id) {
             getFeed(user._id, page)
             .then((newPosts) => {
@@ -26,7 +28,7 @@ function Feed() {
             })
             .catch((err) => console.log(err));
         }
-    }, [user, page]);
+    }, [user, page, update]);
 
     useEffect(() => {
         getUser()
@@ -48,17 +50,17 @@ function Feed() {
             <Navbarsm />
             {openNav ? 
             <div>
-                <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
+                <Navbar openNav={openNav} setOpenNav={setOpenNav} setUpdate={setUpdate}/> 
             </div>
             : 
             <div className='max-sm:hidden'>
-                <Navbar openNav={openNav} setOpenNav={setOpenNav} />
+                <Navbar openNav={openNav} setOpenNav={setOpenNav} setUpdate={setUpdate} />
             </div>
             }
             <div className='flex flex-col h-screen max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
                 <div className='sm:hidden'>
-                    <PostTweetButton/>
+                    <PostTweetButton setUpdate={setUpdate}/>
                 </div>
                 <div>
                     <h1 className='max-sm:hidden text-xl font-bold p-3'>Home</h1>
@@ -72,13 +74,13 @@ function Feed() {
                         <hr className='mt-2 border-t-[#2f3336] ' />
                 </div>
                 <div className='max-sm:hidden'>
-                    <PostTweet />
+                    <PostTweet setUpdate={setUpdate}/>
                 </div>
                 <div className='flex-grow overflow-y-scroll scrollbar-hide'>
                     {
                     feedPosts ?
                         feedPosts.map((post, index) => (
-                            <TweetBlock key={index} postId={post._id} />
+                            <TweetBlock key={index} postId={post._id} setUpdate={setUpdate}/>
                         ))
                     : null
                 }

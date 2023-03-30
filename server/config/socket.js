@@ -7,7 +7,7 @@ const Post = require('../models/PostModel');
 const configureSockets = (server) => {
   const io = socketIO(server, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.CLIENT_URL,
       methods: ['GET', 'POST'],
     },
   });

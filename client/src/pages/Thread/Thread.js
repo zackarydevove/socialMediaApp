@@ -2,9 +2,6 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineTwitter, AiOutlineArrowLeft } from 'react-icons/ai'
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import TweetBlock from '../../components/Tweet/TweetBlock'
 import MainThreadTweet from '../../components/Tweet/MainThreadTweet';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
@@ -18,6 +15,8 @@ import Navbarsm from '../../components/More/Navbarsm';
 function Thread() {
     const [post, setPost] = useState({});
     const [openNav, setOpenNav] = useState(false);
+    const [refresh, setRefresh] = useState(false);
+    const [update, setUpdate ] = useState(false);
     const { postId } = useParams(); // it return a key:value pair of the dynamic variable in url
 
     const navigate = useNavigate();
@@ -31,11 +30,7 @@ function Thread() {
         console.log('post in Thread:', post);
       })
       .catch((err) => console.log(err));
-    }, [postId]);
-
-    useEffect(() => {
-        console.log('post updated:', post);
-      }, [post]);
+    }, [postId, refresh, update]);
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
@@ -64,10 +59,10 @@ function Thread() {
                 <div className='flex flex-col'>
                 {post?._id ? (
                     <>
-                        <MainThreadTweet post={post} />
+                        <MainThreadTweet post={post} setPost={setPost} setRefresh={setRefresh}/>
 
                         {post.replies?.reply?.map((postId, index) => (
-                            <TweetBlock key={index} postId={postId} />
+                            <TweetBlock key={index} postId={postId} setUpdate={setUpdate} />
                         ))}
                     </>
                 ) : (

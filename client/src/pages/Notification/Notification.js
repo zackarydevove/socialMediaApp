@@ -1,9 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { AiOutlineTwitter } from 'react-icons/ai'
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
 import SearchBar from '../../components/More/SearchBar';
@@ -19,18 +16,26 @@ function Notification() {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
 
-    // Reset notification count to zero
     useEffect(() => {
-        resetNotificationCount()
+        getUser()
         .then((res) => {
             setUser(res)
-            setLoading(false);
-            console.log('notification reset');
+            if (res.notificationCount > 0) {
+                resetNotificationCount()
+                .then((updatedUser) => {
+                    setUser(updatedUser)
+                    console.log('notification reset');
+                })
+                .catch((err) => console.log(err));
+            }
         })
         .catch((err) => console.log(err));
-    }, [])
+        // Reset notification count to zero
+    }, [loading])
 
-    console.log(user);
+    useEffect((user) => {
+        setLoading(false);
+    })
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
@@ -52,7 +57,7 @@ function Notification() {
                 <div>
                     <h1 className='max-sm:hidden text-xl font-bold p-3'>Notifications</h1>
                     <div className='sm:hidden w-screen flex justify-center items-center relative p-3'>
-                        <div className='h-8 w-8 bg-blue-900 rounded-full absolute top-3 left-3' onClick={() => setOpenNav(!openNav)} />
+                        <div className='h-8 w-8 bg-pp bg-cover rounded-full absolute top-3 left-3' onClick={() => setOpenNav(!openNav)} />
                         <AiOutlineTwitter size={'1.8em'} className='text-blue-500'/>
                     </div>
                     <div className='flex justify-center items-center'>
@@ -62,15 +67,16 @@ function Notification() {
                 </div>
                 <div className='max-sm:hidden'>
                 </div>
-                <div className='flex-grow overflow-y-scroll'>
-                    {
-                        loading ?
+                <div className='flex-grow overflow-y-scroll scrollbar-hide'>
+                    {loading ? (
                         <div>loading...</div>
-                        :
+                    ) : user.notifications && user.notifications.length > 0 ? (
                         user.notifications.map((notification, index) => (
-                            <NotificationPost key={index} notification={notification}/>
+                        <NotificationPost key={index} notification={notification} />
                         ))
-                    }
+                    ) : (
+                        <div>No notifications to display</div>
+                    )}
                 </div>
             </div>
             

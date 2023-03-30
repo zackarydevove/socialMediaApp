@@ -33,113 +33,202 @@ module.exports.getPost = (req, res) => {
 };
 
 module.exports.deletePost = (req, res) => {
-    const postId = req.params.postId;
-    Post.findOne({_id: postId})
+  const postId = req.params.postId;
+  Post.findOne({ _id: postId })
     .then((post) => {
-         // if user is creator
-        if (post.creator.toString() === req.user._id.toString()) { 
-            User.findOne(req.user._id)
-            .then((user) => {
-                // erase the post id from his replies array
-                user.replies.splice(user.post.indexOf(postId), 1); 
-                user.save()
-                .then(() => {
-                    // If post is a reply to another post, erase it from the original post reply array
-                    if (post.type === 'reply') {
-                        Post.findOne({_id: post.repliedTo})
-                        .then((postRepliedTo) => {
-                            postRepliedTo.replies.reply = postRepliedTo.replies.reply.filter((repliesId) => repliesId.toString() !== post._id.toString())
-                            postRepliedTo.replies.count -= 1;
-                            postRepliedTo.save()
-                            .then(() => console.log('Post removed from the repliedTo post'))
-                            .catch((err) => console.log(err));
-                        })
-                    }
-                    // Erase the post document from the post model
-                    Post.findOneAndDelete({ _id: postId })  
-                    .then((post) => {
-                        console.log('Post deleted');
-                        res.status(200).send('Post deleted');
-                    })
-                    .catch((err) => {
-                        res.status(404).send('Post not found');
-                        console.log(err);
+      if (post.creator.toString() === req.user._id.toString()) {
+        User.findOne(req.user._id)
+          .then((user) => {
+            user.post.splice(user.post.indexOf(postId), 1);
+            user.save()
+              .then(() => {
+                if (post.type === 'reply') {
+                  Post.findOne({ _id: post.repliedTo })
+                    .then((postRepliedTo) => {
+                      if (postRepliedTo) {
+                        postRepliedTo.replies.reply = postRepliedTo.replies.reply.filter((repliesId) => repliesId.toString() !== post._id.toString());
+                        postRepliedTo.replies.count -= 1;
+                        postRepliedTo.save()
+                          .then(() => console.log('Post removed from the repliedTo post'))
+                          .catch((err) => console.log(err));
+                      } else {
+                        console.log("The post that this reply was a reply to has already been deleted.");
+                      }
                     });
-                })
-                .catch((err) => {
-                    res.status(500).send('Server error');
-                    console.log(err);
-                });
-            })
-            .catch((err) => {
+                }
+
+                // Handle removing the post from the users who retweeted or liked it
+                const usersToUpdate = [...post.retweet.users, ...post.likes.users];
+                User.updateMany(
+                  { _id: { $in: usersToUpdate } },
+                  {
+                    $pull: { retweet: postId, likes: postId },
+                  }
+                )
+                  .then(() => {
+                    // Remove the post from the user's notifications array.
+                    User.updateMany(
+                      { "notifications.post": postId },
+                      { $pull: { notifications: { post: postId } } }
+                    )
+                      .then(() => {
+                        console.log("Post removed from users' notifications");
+
+                        // Add the following code to remove the post from the user's bookmarks array.
+                        User.updateMany(
+                          { bookmarks: postId },
+                          { $pull: { bookmarks: postId } }
+                        )
+                          .then(() => {
+                            console.log("Post removed from users' bookmarks");
+
+                            // Continue with deleting the post
+                            Post.findOneAndDelete({ _id: postId })
+                              .then((post) => {
+                                console.log("Post deleted");
+                                res.status(200).send("Post deleted");
+                              })
+                              .catch((err) => {
+                                res.status(404).send("Post not found");
+                                console.log(err);
+                              });
+                          })
+                          .catch((err) => {
+                            console.log("Error updating users' bookmarks", err);
+                          });
+                      })
+                      .catch((err) => {
+                        console.log("Error updating users' notifications", err);
+                      });
+                  })
+                  .catch((err) => {
+                    console.log("Error updating users who retweeted or liked the post", err);
+                  });
+              })
+              .catch((err) => {
                 res.status(500).send('Server error');
                 console.log(err);
-            });
-        } else {
-            res.status(401).send('Unauthorized, you are not the creator');
-        }
+              });
+          })
+          .catch((err) => {
+            res.status(500).send('Server error');
+            console.log(err);
+          });
+      } else {
+        res.status(401).send('Unauthorized, you are not the creator');
+      }
     })
     .catch((err) => {
-        res.status(404).send('Post not found');
-        console.log(err);
+      res.status(404).send('Post not found');
+      console.log(err);
     });
 };
 
 module.exports.like = (req, res) => {
     // Find post liked
-    Post.findOne({_id: req.body.postId})
-    .then((post) => {
+    Post.findOne({ _id: req.body.postId })
+      .then((post) => {
         // Find user who liked
         User.findOne(req.user._id)
-        .then((user) => {
+          .then((user) => {
             if (post.likes.users.includes(user._id)) {
-                post.likes.users = post.likes.users.filter((userId) => userId.toString() !== user._id.toString());
-                post.likes.count -= 1;
-                user.likes = user.likes.filter((postId) => postId.toString() !== post._id.toString());
-                post.save().then(() => user.save())
-                console.log('Post', post._id ,'unliked by', user._id, '\n');
-                res.send('Post successfully unliked')
-            } else {
-                // Find creator to create notification
-                User.findOne(post.creator)
-                .then((creator) => {
-                    creator.notificationCount = creator.notificationCount || 0;
-                    creator.notificationCount += 1;
-                    creator.notifications.unshift({
-                        type: 'like',
-                        fromUser: user._id,
-                        post: post._id,
-                    })
-                    creator.save()
+              // Unlike the post
+              Post.findOneAndUpdate(
+                { _id: req.body.postId },
+                {
+                  $pull: { "likes.users": user._id },
+                  $inc: { "likes.count": -1 },
+                },
+                { new: true }
+              )
+                .then(() => {
+                  // Update user's liked posts
+                  User.findOneAndUpdate(
+                    { _id: req.user._id },
+                    { $pull: { likes: post._id } },
+                    { new: true }
+                  )
                     .then(() => {
-                        post.likes.users.unshift(user._id);
-                        post.likes.count += 1;
-                        user.likes.unshift(post._id);
-                        post.save().then(() => user.save())
-                        console.log('Post', post._id ,'liked by', user._id, '\n');
-                        res.send('Post successfully liked');
+                      console.log('Post', post._id, 'unliked by', user._id, '\n');
+                      res.send('Post successfully unliked');
                     })
-                    .catch((err) =>  {
-                        res.send('Error while saving creator');
-                        console.log(err);
+                    .catch((err) => {
+                      res.send('Error while updating user likes');
+                      console.log(err);
                     });
                 })
-                .catch((err) =>  {
-                    res.send('Creator not found');
-                    console.log(err);
+                .catch((err) => {
+                  res.send('Error while unliking the post');
+                  console.log(err);
+                });
+            } else {
+              // Like the post
+              Post.findOneAndUpdate(
+                { _id: req.body.postId },
+                {
+                  $addToSet: { "likes.users": user._id },
+                  $inc: { "likes.count": 1 },
+                },
+                { new: true }
+              )
+                .then(() => {
+                  // Update user's liked posts
+                  User.findOneAndUpdate(
+                    { _id: req.user._id },
+                    { $addToSet: { likes: post._id } },
+                    { new: true }
+                  )
+                    .then(() => {
+                      // Update the post creator's notifications
+                      User.findOneAndUpdate(
+                        { _id: post.creator },
+                        {
+                          $inc: { notificationCount: 1 },
+                          $push: {
+                            notifications: {
+                              $each: [
+                                {
+                                  type: 'like',
+                                  fromUser: user._id,
+                                  post: post._id,
+                                },
+                              ],
+                              $position: 0,
+                            },
+                          },
+                        },
+                        { new: true }
+                      )
+                        .then(() => {
+                          console.log('Post', post._id, 'liked by', user._id, '\n');
+                          res.send('Post successfully liked');
+                        })
+                        .catch((err) => {
+                          res.send('Error while updating creator notifications');
+                          console.log(err);
+                        });
+                    })
+                    .catch((err) => {
+                      res.send('Error while updating user likes');
+                      console.log(err);
+                    });
+                })
+                .catch((err) => {
+                  res.send('Error while liking the post');
+                  console.log(err);
                 });
             }
-        })
-        .catch((err) => {
+          })
+          .catch((err) => {
             res.send('User not found');
             console.log(err);
-        });
-    })
-    .catch((err) => {
+          });
+      })
+      .catch((err) => {
         res.send('Post not found');
         console.log(err);
-    });
-};
+      });
+  };
 
 module.exports.reply = (req, res) => {
     // Find post replied
@@ -195,61 +284,93 @@ module.exports.reply = (req, res) => {
     .catch((err) => console.log(err));
 };
 
-module.exports.deleteReply = (req, res) => {
-
-}
-
 module.exports.retweet = (req, res) => {
-    // Find post retweeted
-    Post.findOne({_id: req.body.postId})
-    .then((post) => {
-        // Find user who retweeted
-        User.findOne(req.user._id)
-        .then((user) => {
+    const postId = req.body.postId;
+    const userId = req.user._id;
+  
+    Post.findOne({ _id: postId })
+      .then((post) => {
+        User.findOne(userId)
+          .then((user) => {
             if (post.retweet.users.includes(user._id)) {
-                post.retweet.users = post.retweet.users.filter((userId) => userId.toString() !== user._id.toString());
-                post.retweet.count -= 1;
-                user.retweet = user.retweet.filter((postId) => postId.toString() !== post._id.toString());
-                post.save().then(() => user.save())
-                console.log('Post', post._id ,'unretweeted by', user._id, '\n');
-                res.send('Post successfully unretweeted')
-            } else {
-                // Find creator to create notification
-                User.findOne(post.creator)
-                .then((creator) => {
-                    creator.notificationCount = creator.notificationCount || 0;
-                    creator.notificationCount += 1;
-                    creator.notifications.unshift({
-                        type: 'retweet',
-                        fromUser: user._id,
-                        post: post._id,
-                    })
-                    creator.save()
+              Post.findOneAndUpdate(
+                { _id: postId },
+                {
+                  $pull: { 'retweet.users': userId },
+                  $inc: { 'retweet.count': -1 },
+                }
+              )
+                .then(() => {
+                  User.findOneAndUpdate(
+                    { _id: userId },
+                    { $pull: { retweet: postId } }
+                  )
                     .then(() => {
-                        post.retweet.users = post.retweet.users || [];
-                        post.retweet.users.unshift(user._id);
-                        post.retweet.count += 1;
-                        user.retweet = user.retweet || [];
-                        user.retweet.unshift(new mongoose.Types.ObjectId(post._id));
-                        post.save()
+                      console.log(
+                        'Post',
+                        postId,
+                        'unretweeted by',
+                        userId,
+                        '\n'
+                      );
+                      res.send('Post successfully unretweeted');
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+            } else {
+              User.findOneAndUpdate(
+                { _id: post.creator },
+                {
+                  $inc: { notificationCount: 1 },
+                  $push: {
+                    notifications: {
+                      $each: [
+                        {
+                          type: 'retweet',
+                          fromUser: userId,
+                          post: postId,
+                        },
+                      ],
+                      $position: 0,
+                    },
+                  },
+                }
+              )
+                .then(() => {
+                  Post.findOneAndUpdate(
+                    { _id: postId },
+                    {
+                      $push: { 'retweet.users': userId },
+                      $inc: { 'retweet.count': 1 },
+                    }
+                  )
+                    .then(() => {
+                      User.findOneAndUpdate(
+                        { _id: userId },
+                        { $push: { retweet: postId } }
+                      )
                         .then(() => {
-                            user.save()
-                            .then(() => {
-                                console.log('user', user, 'successfully retweeted', post._id, '\n');
-                                res.send('Successfully retweet\n')
-                            })
-                            .catch((err) => console.log(err));
+                          console.log(
+                            'User',
+                            userId,
+                            'successfully retweeted',
+                            postId,
+                            '\n'
+                          );
+                          res.send('Successfully retweet\n');
                         })
                         .catch((err) => console.log(err));
                     })
                     .catch((err) => console.log(err));
                 })
+                .catch((err) => console.log(err));
             }
-        })
-        .catch((err) => console.log(err));
-    })
-    .catch((err) => console.log(err));
-};
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  };
 
 module.exports.bookmark = (req, res) => {
     const postId = req.body.postId;

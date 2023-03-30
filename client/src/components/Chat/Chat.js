@@ -4,7 +4,7 @@ import OtherMsg from './OtherMsg'
 
 function Chat({ messages, currentUser, handleScroll}) {
   return (
-    <div className="h-full flex flex-col-reverse overflow-y-scroll"
+    <div className="h-full flex flex-col-reverse overflow-y-scroll scrollbar-hide"
       onScroll={handleScroll}>
       {messages && messages.length > 0 ? (
         messages.map((message, index) => {

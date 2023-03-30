@@ -23,11 +23,11 @@ function Main() {
     }, [])
 
     const handleGoogleLogin = () => {
-        window.open('http://localhost:5000/api/auth/google', '_self');
+        window.open(`${process.env.REACT_APP_API_URL}/auth/google`, '_self');
     }
 
     const handleFacebookLogin = () => {
-        window.open('http://localhost:5000/api/auth/facebook', '_self');
+        window.open(`${process.env.REACT_APP_API_URL}/auth/facebook`, '_self');
     }
 
     if (user && user._id) {

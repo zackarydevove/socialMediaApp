@@ -1,11 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
-import SearchBar from '../../components/More/SearchBar';
 import Setting from '../../components/Settings/Setting';
 import AccountInfo from '../../components/Settings/AccountInfo';
 import PasswordInfo from '../../components/Settings/PasswordInfo';

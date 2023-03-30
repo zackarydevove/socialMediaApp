@@ -7,26 +7,16 @@ import { FiTrash2 } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import Reply from './Reply';
 import { getUser } from '../../api/auth';
-import { getPost, likeTweet, deleteTweet, retweet } from '../../api/post';
+import { likeTweet, deleteTweet, retweet } from '../../api/post';
 import { formatDate } from '../../utils/formatDate';
+import { bookmark } from '../../api/post';
 
-function MainThreadTweet(props) {
+function MainThreadTweet({post, setPost, setRefresh}) {
     const [user, setUser] = useState({});
-    const [post, setPost] = useState(props.post || {}); 
     const [openDelete, setOpenDelete] = useState(false);
     const [openReply, setOpenReply] = useState(false);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (props.postId) {
-            getPost(props.postId)
-            .then((res) => setPost(res))
-            .catch((err) => console.log('Error while getting tweet', err));
-        } else {
-            setPost(props.post || {});
-        }
-    }, [])
 
     useEffect(() => {
         getUser()
@@ -34,34 +24,50 @@ function MainThreadTweet(props) {
         .catch((err) => console.log('Error during fetching user', err));
     }, [post]);
 
+    // Like
     const handleLikeTweet = () => {
-        likeTweet(props.postId)
-        .then((res) => setPost(res))
+        likeTweet(post._id)
+        .then((res) => {
+            setRefresh((prev) => !prev);
+        })
         .catch((err) => console.log('Error during like', err));
     }
 
+    // Delete
     const handleDeleteTweet = () => {
-        console.log('DELETE THIS ID:', props.postId);
-        deleteTweet(props.postId)
+        console.log('DELETE THIS ID:', post._id);
+        deleteTweet(post._id)
         .then((res) => {
             setPost({});
-            props.setUpdate(!props.update);
+            navigate(-1);
             setOpenDelete(false);
         })
         .catch((err) => console.log('Error during delete', err));
     }
-    
+
+    // Retweet
     const handleRetweet = () => {
-        retweet(props.postId)
+        retweet(post._id)
         .then((res) => {
-            console.log('okay');
+            setRefresh((prev) => !prev);
         })
         .catch((err) => console.log('Error during retweet', err));
     }
 
+    const handleBookmark = () => {
+        bookmark(post._id)
+        .then((res) => {
+            setRefresh((prev) => !prev);
+            console.log('Bookmark successful');
+        })
+        .catch((err) => console.log(err));
+    }
+
+
+
     return (
         <div className='hover:cursor-pointer relative'>
-            { openReply ? <Reply post={post} openReply={openReply} setOpenReply={setOpenReply}/> : null }
+            { openReply ? <Reply user={user} post={post} setOpenReply={setOpenReply} setRefresh={setRefresh}/> : null }
     
             <div className='absolute h-full w-full'
                 onClick={() => navigate(`/tweet/${post._id}`)}>
@@ -72,10 +78,10 @@ function MainThreadTweet(props) {
                 <div className='w-full flex'>
 
                     <div className='p-1 pr-2 z-10 flex flex-grow'>
-                        <div className='w-12 h-12 bg-blue-500 rounded-full hover:cursor-pointer'/>
+                        <div className='w-12 h-12 bg-pp bg-cover rounded-full hover:cursor-pointer'/>
 
                         <div className='flex flex-col pl-2'>
-                            <p className='text-ellipsis overflow-hidden hover:cursor-pointer z-10'>{post.username || 'abc'}</p>
+                            <p className='text-ellipsis overflow-hidden hover:cursor-pointer z-10'>{post.twittername || 'abc'}</p>
                             <p className='text-gray-500 text-ellipsis overflow-hidden z-10'>{post.username || 'abc'}</p>
                         </div>
                     </div>
@@ -148,7 +154,8 @@ function MainThreadTweet(props) {
                                     onClick={handleLikeTweet}/>
                             </div>
                             <div className='flex items-center gap-2 hover:shadow-[0px_0px_1px_7px_rgba(29,155,240,0.2)] hover:bg-[#1d9bf0] hover:bg-opacity-20 rounded-full'>
-                                <BsBookmark size={'1.2em'} className={`hover:cursor-pointer z-20 transition hover:text-[#1d9bf0] ${user && user.bookmarks && user.bookmarks.includes(post._id) ? 'text-[#1d9bf0]' : 'text-gray-500'}`}/>
+                                <BsBookmark size={'1.2em'} className={`hover:cursor-pointer z-20 transition hover:text-[#1d9bf0] ${user && user.bookmarks && user.bookmarks.includes(post._id) ? 'text-[#1d9bf0]' : 'text-gray-500'}`}
+                                    onClick={handleBookmark}/>
                             </div>
                         </div>
                     </div>

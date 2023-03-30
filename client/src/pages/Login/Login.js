@@ -26,11 +26,11 @@ function Login(props) {
     }
 
     const handleGoogleLogin = () => {
-        window.open('http://localhost:5000/api/auth/google', '_self');
+        window.open(`${process.env.REACT_APP_API_URL}/auth/google`, '_self');
     }
 
     const handleFacebookLogin = () => {
-        window.open('http://localhost:5000/api/auth/facebook', '_self');
+        window.open(`${process.env.REACT_APP_API_URL}/auth/facebook`, '_self');
     }
 
   return (
@@ -107,6 +107,9 @@ function Login(props) {
                             props.setRegisterClick(true);
                             props.setLoginClick(false);
                         }}>Sign up</button>
+                    </div>
+                    <div>
+                        <p className='text-xs'>Demo account: demo / Demo1234$</p>
                     </div>
             </div>
         </div>

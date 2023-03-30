@@ -149,7 +149,7 @@ function Conversation({actualChatId, setActualChatId, currentUser, messages, set
 
                         < AiOutlineArrowLeft size={'1.5em'} onClick={() => setActualChatId('')}
                           className='lg:hidden'/>
-                        <div className='w-8 h-8 bg-blue-600 rounded-full'/>
+                        <div className='w-8 h-8 bg-pp bg-cover rounded-full'/>
                         {/* Name */}
                         {
                           participants && participants.length > 0 &&

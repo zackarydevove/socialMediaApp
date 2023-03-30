@@ -4,7 +4,6 @@ import { AiOutlineFileGif, AiOutlineSend } from 'react-icons/ai'
 import { sendMessage } from '../../api/chat';
 import { useState } from 'react';
 import socket from '../../socket';
-import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
 function SendMessage({chatId, sender, receiver, onSentMessage}) {

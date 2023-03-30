@@ -2,7 +2,6 @@ import React from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import socket from '../../socket';
-import { useState } from 'react';
 
 function ChatInfo(
   {openChatInfo,
@@ -38,7 +37,7 @@ function ChatInfo(
         {/* Group Name */}
         <div className='flex px-3 pb-5'>
           <div className='flex items-center flex-grow'>
-            <div className='w-12 h-12 bg-blue-500 rounded-full'/>
+            <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
             <p className='pl-3 font-bold text-lg'>Group name</p>
           </div>
           <div className='flex items-center'>
@@ -56,9 +55,9 @@ function ChatInfo(
                 {/* Name */}
                 <div className='flex flex-grow'
                     onClick={() => navigate(`/profile/${currentUser.username}`)}>
-                  <div className='w-12 h-12 bg-blue-500 rounded-full'/>
+                  <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
                   <div className='pl-3'>
-                    <p>{currentUser.username}</p>
+                    <p>{currentUser.twittername}</p>
                     <p className='text-gray-500'>@{currentUser.username}</p>
                   </div>
                 </div>
@@ -71,9 +70,9 @@ function ChatInfo(
                 {/* Name */}
                 <div className='flex flex-grow'
                   onClick={() => navigate(`/profile/${member.username}`)}>
-                  <div className='w-12 h-12 bg-blue-500 rounded-full'/>
+                  <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
                   <div className='pl-3'>
-                    <p>{member.username}</p>
+                    <p>{member.twittername}</p>
                     <p className='text-gray-500'>@{member.username}</p>
                   </div>
                 </div>

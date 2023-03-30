@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:5000/api/follow';
+const API_URL = `${process.env.REACT_APP_API_URL}/follow`;
 
 export const follow = (userIdToFollow) => {
     return axios({

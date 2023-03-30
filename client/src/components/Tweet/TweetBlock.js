@@ -9,7 +9,6 @@ import Reply from './Reply';
 import { getUser, getCreator } from '../../api/auth';
 import { getPost, likeTweet, deleteTweet, retweet, bookmark } from '../../api/post';
 import { tweetCreatedDate } from '../../utils/tweetCreatedDate';
-import socket from '../../socket';
 
 function TweetBlock({postId, setUpdate}) {
     const [user, setUser] = useState({});
@@ -59,11 +58,12 @@ function TweetBlock({postId, setUpdate}) {
 
     // Delete
     const handleDeleteTweet = () => {
-        console.log('DELETE THIS ID:', postId);
         deleteTweet(postId)
         .then((res) => {
-            setPost({});
-            setUpdate((prev) => !prev); 
+            if (res === 'Post deleted') {
+                setPost({});
+                setUpdate((prev) => !prev); 
+            }
             setOpenDelete(false);
         })
         .catch((err) => console.log('Error during delete', err));
@@ -74,15 +74,15 @@ function TweetBlock({postId, setUpdate}) {
         retweet(postId)
         .then((res) => {
             setRefresh((prev) => !prev);
-            socket.emit('retweet', { fromUser: user._id, postId: postId });
         })
         .catch((err) => console.log('Error during retweet', err));
     }
 
     const handleBookmark = () => {
-        console.log('postid bookmark:', postId)
         bookmark(postId)
         .then((res) => {
+            setRefresh((prev) => !prev);
+            setOpenOptions(false);
             console.log('Bookmark successful');
         })
         .catch((err) => console.log(err));
@@ -91,7 +91,7 @@ function TweetBlock({postId, setUpdate}) {
     return (
         <div className='font-opensans hover:cursor-pointer relative'>
     
-            { openReply ? <Reply user={user} post={post} openReply={openReply} setOpenReply={setOpenReply}/> : null }
+            { openReply ? <Reply user={user} post={post} setOpenReply={setOpenReply} setRefresh={setRefresh}/> : null }
     
             <div className='absolute h-full w-full'
                 onClick={() => navigate(`/tweet/${post._id}`)}>
@@ -100,7 +100,8 @@ function TweetBlock({postId, setUpdate}) {
             <div className='max-w-screen flex p-2'>
                 {/* Left */}
                 <div className='p-1 pr-2 z-10'>
-                    <div className='w-12 h-12 bg-blue-500 rounded-full hover:cursor-pointer'/>
+                    <div className='w-12 h-12 bg-pp bg-cover rounded-full hover:cursor-pointer'
+                        onClick={() => navigate(`/profile/${creator.username}`)}/>
                 </div>
     
                 {/* Right */}
@@ -109,8 +110,10 @@ function TweetBlock({postId, setUpdate}) {
                     <div className='w-full flex justify-between items-center'>
                         {/* left */}
                         <div className='flex'>
-                            <p className='text-ellipsis overflow-hidden hover:cursor-pointer z-10'>{creator.username}</p>
-                            <p className='ml-1 text-gray-500 text-ellipsis overflow-hidden z-10'>@{creator.username}</p>
+                            <p className='text-ellipsis overflow-hidden hover:cursor-pointer z-10'
+                                onClick={() => navigate(`/profile/${creator.username}`)}>{creator.twittername}</p>
+                            <p className='ml-1 text-gray-500 text-ellipsis overflow-hidden z-10'
+                                onClick={() => navigate(`/profile/${creator.username}`)}>@{creator.username}</p>
                             <p className='ml-1 text-gray-500 z-10'>· {tweetCreatedDate((new Date(post.createdAt)))}</p>
                         </div>
     

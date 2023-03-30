@@ -1,13 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
 import { BiMessageAdd } from 'react-icons/bi';
-import { ImSearch } from 'react-icons/im';
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
-import SearchBar from '../../components/More/SearchBar';
 import Contact from '../../components/Chat/Contact';
 import Conversation from '../../components/Chat/Conversation';
 import EmptyConversation from '../../components/Chat/EmptyConversation';
@@ -132,7 +128,7 @@ function Message() {
                         </div>
                         <hr className='mt-2 border-t-[#2f3336]'/>
                     </div>
-                    <div className='overflow-y-scroll max-sm:h-[80vh]'>
+                    <div className='overflow-y-scroll scrollbar-hide max-sm:h-[80vh]'>
                     {
                         chats ? chats.map((chatId) => {
                             return (

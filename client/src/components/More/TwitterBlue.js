@@ -16,8 +16,8 @@ function TwitterBlue({setOpenTwitterBlue}) {
     }
 
   return (
-    <div className='z-50 fixed left-0 top-0 md:w-screen md:h-screen bg-blue-300 bg-opacity-20 max-sm:max-h-screen max-sm:overflow-y-scroll'>
-        <div className='w-screen h-screen md:w-[600px] md:h-[750px] md:fixed md:left-[50%] md:translate-x-[-50%] md:top-16 z-30 bg-black md:rounded-2xl max-sm:max-h-screen max-sm:overflow-y-scroll'>
+    <div className='z-50 fixed left-0 top-0 md:w-screen md:h-screen bg-blue-300 bg-opacity-20 max-sm:max-h-screen max-sm:overflow-y-scroll max-sm:scrollbar-hide'>
+        <div className='w-screen h-screen md:w-[600px] md:h-[750px] md:fixed md:left-[50%] md:translate-x-[-50%] md:top-16 z-30 bg-black md:rounded-2xl max-sm:max-h-screen max-sm:overflow-y-scroll max-sm:scrollbar-hide'>
             <div className='flex flex-col w-full h-full z-40 relative'>
                 {/* Up titre */}
                 <div className='w-full p-4 pb-0 max-sm:w-screen'>

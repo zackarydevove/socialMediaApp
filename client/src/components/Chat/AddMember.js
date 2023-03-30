@@ -4,7 +4,6 @@ import { AiOutlineCheck } from 'react-icons/ai';
 import { useState, useEffect } from 'react';
 import SearchUserToDm from './SearchUserToDm';
 import { getFollowedUsers } from '../../api/follow';
-import { getParticipants } from '../../api/chat';
 import socket from '../../socket';
 
 function AddMember({
@@ -93,7 +92,7 @@ function AddMember({
                         selectedUsers ?
                             selectedUsers.map((user) => (
                                 <div className=' w-fit p-[0.15rem] flex items-center border border-[#2f3336] rounded-[20px] '>
-                                    <div className='h-6 w-6 bg-blue-500 rounded-full'/>
+                                    <div className='h-6 w-6 bg-pp bg-cover rounded-full'/>
                                     <p className='pl-2 pr-2'>{user.username}</p>
                                     <RxCross1 className='text-blue-500 hover:cursor-pointer'
                                         onClick={() =>  handleDeleteSelectedUsers(user)}/>
@@ -115,9 +114,9 @@ function AddMember({
                                     key={followedUser._id}>
                                         <div className='flex flex-grow'>
                                             <div className='z-20 w-full h-full absolute top-0 left-0 bg-black bg-opacity-50'/>
-                                            <div className='w-12 h-12 bg-blue-500 rounded-full'/>
+                                            <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
                                             <div className='px-3' >
-                                                <p>{followedUser.username}</p>
+                                                <p>{followedUser.twittername}</p>
                                                 <p className='text-gray-500'>@{followedUser.username}</p>
                                             </div>
                                         </div>
@@ -129,9 +128,9 @@ function AddMember({
                                     <div className='flex mt-3 p-3 hover:bg-gray-500 hover:bg-opacity-20 hover:cursor-pointer'
                                     key={followedUser._id}
                                     onClick={() => handleSelectUser(followedUser)}>
-                                        <div className='w-12 h-12 bg-blue-500 rounded-full'/>
+                                        <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
                                         <div className='px-3'>
-                                            <p>{followedUser.username}</p>
+                                            <p>{followedUser.twittername}</p>
                                             <p className='text-gray-500'>@{followedUser.username}</p>
                                         </div>
                                     </div>

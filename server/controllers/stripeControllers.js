@@ -18,12 +18,12 @@ module.exports.stripe = (req, res) => {
                     quantity: 1,
             },
         ],
-        success_url: 'http://localhost:3000/home',
-        cancel_url: 'http://localhost:3000/home'
+        success_url: `${process.env.CLIENT_URL}/home`,
+        cancel_url: `${process.env.CLIENT_URL}/home`
     })
     .then((response) => {
         console.log(response);
-        if (response.success_url === 'http://localhost:3000/home') {
+        if (response.success_url === `${process.env.CLIENT_URL}/home`) {
             console.log('payment success');
         } else {
             console.log('error during payment');

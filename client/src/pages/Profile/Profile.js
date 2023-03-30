@@ -2,9 +2,6 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import TweetBlock from '../../components/Tweet/TweetBlock'
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
@@ -23,7 +20,8 @@ function Profile() {
     const [selected, setSelected] = useState('Tweets');
     const [loading, setLoading] = useState(true);
 
-    const { username } = useParams();
+    let { username } = useParams();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -47,7 +45,7 @@ function Profile() {
         .finally(() => {
           if (user && userProfile) setLoading(false);
         });
-    }, [update]);
+    }, [username, update]);
 
     console.log('In profile, currentUser:', user);
     console.log('In profile, userProfile:', userProfile);
@@ -105,9 +103,35 @@ function Profile() {
                     </div>
                         <hr className='mt-2 border-t-[#2f3336] ' />
                 </div>
+
+                {/* Post */}
                 <div className='flex-grow overflow-y-scroll scrollbar-hide'>
                     {userProfile && selected === "Tweets" && userProfile.post && (
                       userProfile.post.map((postId, index) => (
+                        <TweetBlock
+                          key={index}
+                          postId={postId}
+                          setUpdate={setUpdate}
+                        />
+                      ))
+                    )}
+                    
+                    {/* Replies */}
+                    {userProfile && selected === "Replies" && userProfile.replies && (
+                          userProfile.replies.map((postId, index) => (
+                            <TweetBlock
+                              key={index}
+                              // username={userProfile.username}
+                              postId={postId}
+                              update={update}
+                              setUpdate={setUpdate}
+                            />
+                          ))
+                    )}
+
+                    {/* Likes */}
+                    {userProfile && selected === "Likes" && userProfile.likes && (
+                      userProfile.likes.map((postId, index) => (
                         <TweetBlock
                           key={index}
                           username={userProfile.username}
@@ -117,46 +141,26 @@ function Profile() {
                         />
                       ))
                     )}
+
+                    {/* Retweet */}
+                    {userProfile && selected === "Retweet" && userProfile.retweet && (
+                      userProfile.retweet.map((postId, index) => (
+                        <TweetBlock
+                          key={index}
+                          postId={postId}
+                          setUpdate={setUpdate}
+                        />
+                      ))
+                    )}
                 </div>
 
-{userProfile && selected === "Replies" && userProfile.replies && (
-      userProfile.replies.map((postId, index) => (
-        <TweetBlock
-          key={index}
-          // username={userProfile.username}
-          postId={postId}
-          update={update}
-          setUpdate={setUpdate}
-        />
-      ))
-    )}
 
-    {userProfile && selected === "Likes" && userProfile.likes && (
-      userProfile.likes.map((postId, index) => (
-        <TweetBlock
-          key={index}
-          username={userProfile.username}
-          postId={postId}
-          update={update}
-          setUpdate={setUpdate}
-        />
-      ))
-    )}
 
-    {userProfile && selected === "Retweet" && userProfile.retweet && (
-      userProfile.retweet.map((postId, index) => (
-        <TweetBlock
-          key={index}
-          postId={postId}
-          setUpdate={setUpdate}
-        />
-      ))
-    )}
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>
                 <Search />
-                <Recommend />
+                <Recommend setUserProfile={setUserProfile}/>
                 <Terms />
             </div>
     </div>

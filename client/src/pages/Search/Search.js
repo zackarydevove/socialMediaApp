@@ -2,41 +2,17 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-import { BsFillHouseFill, BsFillBellFill } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
 import SearchBar from '../../components/More/SearchBar';
 import Recommend from '../../components/More/Recommend';
 import Terms from '../../components/More/Terms';
-import UserCard from '../../components/Search/UserCard';
-// import { searchUsers } from '../../api/search';
 import Navbarsm from '../../components/More/Navbarsm';
 
 function Search() {
     const [openNav, setOpenNav] = useState(false);
-    // const [searchResults, setSearchResults] = useState([]);
 
     const navigate = useNavigate();
-
-    // const handleSearch = (e) => {
-    //     const query = e.target.value;
-
-    //     // If there is something to search for, searchUsers
-    //     if (query.length > 0) {
-    //       searchUsers(query)
-    //         .then((users) => {
-    //           setSearchResults(users);
-    //         })
-    //         .catch((err) => {
-    //           console.log(err);
-    //         });
-    //     // If nothing to search, empty array of users
-    //     } else {
-    //       setSearchResults([]);
-    //     }
-    //   };
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>

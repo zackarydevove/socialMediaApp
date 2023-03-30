@@ -7,7 +7,7 @@ import { postTweet } from '../../api/post';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
-function Tweet(props) {
+function Tweet({setOpenTweet, setUpdate = null}) {
     const [content, setContent] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -16,9 +16,11 @@ function Tweet(props) {
     };
 
     const handleClick = () => {
-        postTweet(content);
-        props.setUpdate(!props.update);
-        props.setOpenTweet(false);
+        postTweet(content)
+        if (setUpdate) {
+            setUpdate((prev) => !prev);
+        }
+        setOpenTweet(false);
     }
 
   return (
@@ -28,13 +30,13 @@ function Tweet(props) {
                 {/* Up */}
                 <div className='flex pl-1'>
                     <RxCross1 size={'1.3em'} className='text-white hover:cursor-pointer'
-                        onClick={() => props.setOpenTweet(false)}/>
+                        onClick={() => setOpenTweet(false)}/>
                 </div>
                 {/* Bottom */}
                 <div className='flex h-full py-3'>
                     {/* Left */}
                     <div>
-                        <div className='h-12 w-12 bg-blue-500 rounded-full'/>
+                        <div className='h-12 w-12 bg-pp bg-cover rounded-full'/>
                     </div>
                     {/* Right */}
                     <div className='w-full h-full flex flex-col p-3'>

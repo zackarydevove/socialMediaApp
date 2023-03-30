@@ -40,6 +40,7 @@ module.exports.register = (req, res) => {
                 .then((hashedPassword) => {
                     const newUser = new User({
                         username: req.body.username,
+                        twittername: req.body.username,
                         email: req.body.email,
                         password: hashedPassword
                     })

@@ -50,7 +50,7 @@ function Navbar(props) {
         <div className='p-3 sm:hidden'>
           {/* Profile picture */}
           <div className='flex justify-between'>
-            <div className='w-12 h-12 bg-blue-800 rounded-full relative'/>
+            <div className='w-12 h-12 bg-pp bg-cover rounded-full relative'/>
             <BsThreeDots size={'1.3em'}
               onClick={() => setOpenProfile(!openProfile)}/>
               {
@@ -130,7 +130,7 @@ function Navbar(props) {
               <h1 className='text-xl sm:hidden xl:block'>Settings</h1>
             </div>
             <div className='w-full max-sm:hidden h-14 flex items-center gap-5 hover:cursor-pointer'>
-              <PostTweetButton update={props.update} setUpdate={props.setUpdate}/>
+              <PostTweetButton setUpdate={props.setUpdate}/>
             </div>
           </div>
             <div className='max-sm:hidden lg:p-5 lg:mb-10 w-full h-14 flex flex-col justify-center lg:justify-between items-center gap-2 hover:cursor-pointer relative'
@@ -146,10 +146,10 @@ function Navbar(props) {
                 <div className='flex xl:w-[258px] xl:hover:bg-gray-500 xl:hover:bg-opacity-20 py-2 px-4 rounded-[3rem]'>
                   <div className='flex flex-grow gap-2 items-center '>
                     {/* Profile Picture */}
-                    <div className='h-10 w-10 bg-blue-900 rounded-full' />
+                    <div className='h-10 w-10 bg-pp bg-cover rounded-full' />
                     {/* Profile Name */}
                     <div className='flex flex-col max-xl:hidden'>
-                        <h1 >{user.username}</h1>
+                        <h1 >{user.twittername}</h1>
                         <p className='text-gray-600'>@{user.username}</p>
                     </div>
                   </div>

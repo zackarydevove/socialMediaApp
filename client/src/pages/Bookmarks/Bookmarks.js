@@ -1,8 +1,5 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { BsFillHouseFill, BsFillBellFill, BsThreeDots } from 'react-icons/bs';
-import { ImSearch } from 'react-icons/im';
-import { FaEnvelope } from 'react-icons/fa';
 import PostTweetButton from '../../components/Tweet/PostTweetButton'
 import Navbar from '../../components/More/Navbar'
 import SearchBar from '../../components/More/SearchBar';
@@ -15,12 +12,13 @@ import Navbarsm from '../../components/More/Navbarsm';
 function Bookmarks() {
     const [openNav, setOpenNav] = useState(false);
     const [user, setUser] = useState({});
+    const [update, setUpdate] = useState(false);
 
     useEffect(() => {
         getUser()
         .then((user) => setUser(user))
         .catch((err) => console.log(err));
-    }, [])
+    }, [update])
 
     console.log('user in bookmark:', user);
 
@@ -61,6 +59,7 @@ function Bookmarks() {
                             <TweetBlock 
                             key={index}
                             postId={postId}
+                            setUpdate={setUpdate}
                             />
                         )
                     })

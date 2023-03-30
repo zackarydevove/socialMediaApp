@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { follow } from '../../api/follow';
 import { joinedDate } from '../../utils/joinedDate';
-import { updateUser } from '../../api/user';
+import UpdateProfile from './UpdateProfile';
 
 function ProfileInfo({
     currentUser = null, 
@@ -15,12 +15,6 @@ function ProfileInfo({
 }) {
     const [isHovered, setIsHovered] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [banner, setBanner] = useState(userProfile.banner || '')
-    const [picture, setPicture] = useState(userProfile.picture || '')
-    const [twitterName, setTwitterName] = useState(userProfile.twittername || userProfile.username)
-    const [description, setDescription] = useState(userProfile.description || '')
-    const [link, setLink] = useState(userProfile.link || '')
-
 
     const navigate = useNavigate();
 
@@ -43,39 +37,29 @@ function ProfileInfo({
         .catch((err) => console.log(err));
     }
 
-    const handleEdit = () => {
-        console.log('twitterName, description, link', twitterName, description, link);
-        setEditOpen(false)
-        updateUser(userProfile._id, twitterName, description, link)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    }
-
-   
   return (
     <div>
+        {
+            editOpen ?
+            <UpdateProfile user={currentUser} setEditOpen={setEditOpen} setUpdate={setUpdate}/>
+            : null
+        }
         {/* Banner */}
         <div className='pb-[150px] sm:pb-[120px]'>
-            <div className='w-full h-[200px] absolute bg-slate-800' />
+            <div className='w-full h-[200px] absolute bg-banner bg-cover' />
         </div>
 
         {/* Info */}
         <div className='p-3'>
             {/* PP and Edit */}
             <div className='flex justify-between items-center'>
-                <div className='w-20 h-20 sm:w-[134px] sm:h-[134px] border-4 border-black bg-blue-500 rounded-full z-10'/>
+                <div className='w-20 h-20 sm:w-[134px] sm:h-[134px] border-4 border-black bg-pp bg-cover rounded-full z-10'/>
                 <div className='pt-12 sm:pt-16'>
                 {
                     currentUser.username === userProfile.username 
                     ? 
-                    (
-                        editOpen === true ? 
-                        <button className="h-[36px] pl-4 pr-4 rounded-full border border-[#666666]"
-                            onClick={handleEdit}>Confirm</button>
-                        :
                         <button className="h-[36px] pl-4 pr-4 rounded-full border border-[#666666]"
                             onClick={() => setEditOpen(true)}>Edit Profile</button>
-                    )
                     : 
                         currentUser?.follow?.users?.some((userId) => userId?.toString() === userProfile._id?.toString())
                             ? 
@@ -91,25 +75,22 @@ function ProfileInfo({
             </div>
             {/* Name */}
             <div>
-                <input className='outline-none bg-black text-xl pt-3' readOnly={!editOpen} 
-                    onChange={(e) => setTwitterName(e.target.value)} value={twitterName}></input>
+                <p className='outline-none bg-black text-xl pt-3'>{userProfile.twittername}</p>
                 <p className='text-gray-500'>@{userProfile.username}</p>
             </div>
             {/* Bio */}
             <div className='pt-3'>
-                <input className='outline-none bg-black' readOnly={!editOpen} 
-                    onChange={(e) => setDescription(e.target.value)} value={description}></input>
+                <p className='outline-none bg-black'>{userProfile.description}</p>
             </div>
             {/* Links */}
             <div className='flex items-center gap-3 pt-3'>
                 <div className='text-gray-500 flex items-center gap-1'>
                     <AiOutlineLink size={'1.3em'}/>
-                    <input className=' outline-none text-blue-400 hover:cursor-pointer bg-black border ' readOnly={!editOpen}
-                        onChange={(e) => setLink(e.target.value)} target="_blank" value={link}></input>
+                    <p className=' outline-none text-blue-400 hover:cursor-pointer bg-black'>{userProfile.link}</p>
                 </div>
-                <div className='text-gray-500 flex items-center gap-2 border'>
+                <div className='text-gray-500 flex items-center gap-2'>
                     <BsCalendar2Week />
-                    <p>Joined {joinedDate(userProfile.createdAt)}</p>
+                    <p>Joined {userProfile?.createdAt ? joinedDate(userProfile.createdAt) : ''}</p>
                 </div>
             </div>
             {/* Numbers */}

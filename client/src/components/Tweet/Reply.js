@@ -4,11 +4,9 @@ import { BsCardImage, BsFillEmojiSmileFill } from 'react-icons/bs';
 import { AiOutlineFileGif } from 'react-icons/ai';
 import { useState } from 'react';
 import { replyTweet } from '../../api/post';
-import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
-import socket from '../../socket';
 
-function Reply(props) {
+function Reply({user, post, setOpenReply, setRefresh}) {
     const [content, setContent] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -17,12 +15,12 @@ function Reply(props) {
     };
 
     const handleReply = () => {
-        replyTweet(props.post._id, content)
+        replyTweet(post._id, content)
         .then((reply) => {
-            socket.emit('reply', { fromUser: props.user._id, postId: reply._id });
+            setRefresh(prev => !prev);
         })
         .catch((err) => console.log(err));
-        props.setOpenReply(false);
+        setOpenReply(false);
     }
 
   return (
@@ -32,14 +30,14 @@ function Reply(props) {
                 {/* Up (cross) */}
                 <div className='flex pl-1 pb-3'>
                     <RxCross1 size={'1.3em'} className='text-white hover:cursor-pointer'
-                        onClick={() => props.setOpenReply(false)}/>
+                        onClick={() => setOpenReply(false)}/>
                 </div>
 
                 {/* Middle (post replied to) */}
                 <div className='flex'>
                     {/* Left (logo) */}
                     <div className='p-1 pr-3 flex-col justify-center items-center'>
-                        <div className='w-12 h-12 bg-blue-500 rounded-full'/>
+                        <div className='w-12 h-12 bg-pp bg-cover rounded-full'/>
                         <div className='h-full w-full flex items-center justify-center'>
                             <hr className='h-full w-[1px] border-l border-[#2f3336]' />
                         </div>
@@ -50,21 +48,21 @@ function Reply(props) {
                         {/* up */}
                         <div className='w-full flex justify-between items-center'>
                             <div className='flex'>
-                                <p className='text-ellipsis overflow-hidden'>{props.post.username}</p>
-                                <p className='ml-1 text-gray-500 text-ellipsis overflow-hidden'>@{props.post.username}</p>
+                                <p className='text-ellipsis overflow-hidden'>{post.twittername}</p>
+                                <p className='ml-1 text-gray-500 text-ellipsis overflow-hidden'>@{post.username}</p>
                                 <p className='ml-1 text-gray-500'>· 36m</p>
                             </div>
                         </div>
 
                         {/* middle */}
                         <div className='w-4/5'>
-                            <p className='break-words'>{props.post.content}</p>
+                            <p className='break-words'>{post.content}</p>
                         </div>
 
                         {/* bottom */}
                         <div className='flex gap-1 mt-2'>
-                            <p className='text-gray-500'>Replying to {props.post.username}</p>
-                            <p className='text-blue-600'>@{props.post.username}</p>
+                            <p className='text-gray-500'>Replying to {post.twittername}</p>
+                            <p className='text-blue-600'>@{post.username}</p>
                         </div>
                     </div>
                 </div>
@@ -75,7 +73,7 @@ function Reply(props) {
                 <div className='flex h-full py-3'>
                     {/* Left */}
                     <div className='p-1'>
-                        <div className='h-12 w-12 bg-blue-500 rounded-full'/>
+                        <div className='h-12 w-12 bg-pp bg-cover rounded-full'/>
                     </div>
                     {/* Right */}
                     <div className='w-full h-full flex flex-col p-3'>
