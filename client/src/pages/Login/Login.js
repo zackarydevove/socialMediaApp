@@ -108,6 +108,9 @@ function Login(props) {
                             props.setLoginClick(false);
                         }}>Sign up</button>
                     </div>
+                    <div>
+                        <p className='text-xs'>Demo account: demo / Demo1234$</p>
+                    </div>
             </div>
         </div>
     </div>
