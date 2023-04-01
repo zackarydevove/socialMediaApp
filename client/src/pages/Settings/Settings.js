@@ -7,12 +7,16 @@ import AccountInfo from '../../components/Settings/AccountInfo';
 import PasswordInfo from '../../components/Settings/PasswordInfo';
 import { getUser } from '../../api/auth';
 import Navbarsm from '../../components/More/Navbarsm';
+import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 function Settings() {
     const [updateUser, setUpdateUser] = useState(false);
     const [openNav, setOpenNav] = useState(false);
     const [show, setShow] = useState('');
     const [user, setUser] = useState({});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         getUser()
@@ -53,7 +57,9 @@ function Settings() {
                     </div>
                     <div>
                         <div className='flex sm:justify-between p-3'>
-                            <h1 className='text-xl font-bold'>Settings</h1>
+                        <AiOutlineArrowLeft size={'1.5em'} className='sm:hidden'
+                                    onClick={() => navigate(-1)}/>
+                            <h1 className='text-xl font-bold max-sm:pl-3'>Settings</h1>
                         </div>
                             <hr className='mt-2 border-t-[#2f3336] ' />
                     </div>

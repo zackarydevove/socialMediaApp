@@ -11,6 +11,7 @@ import Navbarsm from '../../components/More/Navbarsm';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
+
 function Bookmarks() {
     const [openNav, setOpenNav] = useState(false);
     const [user, setUser] = useState({});
@@ -48,7 +49,7 @@ function Bookmarks() {
                     <div className='flex p-3'>
                         <AiOutlineArrowLeft size={'1.5em'} className='sm:hidden'
                                     onClick={() => navigate(-1)}/>
-                        <div className='flex flex-col max-sm:pl-5'>
+                        <div className='flex flex-col max-sm:pl-3'>
                             <h1 className='text-xl font-bold'>Bookmarks</h1>
                             <p className='text-sm text-gray-500'>@{user.username}</p>
                         </div>

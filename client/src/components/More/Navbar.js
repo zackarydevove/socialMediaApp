@@ -71,18 +71,18 @@ function Navbar(props) {
           </div>
           {/* Profile name */}
           <div className='flex flex-col'>
-            <h1 className='text-lg'>Zackary Devove</h1>
-            <p className='text-gray-500'>@ZackaryDevove</p>
+            <h1 className='text-lg'>{user.username}</h1>
+            <p className='text-gray-500'>@{user.twittername}</p>
           </div>
 
           {/* Profile followers */}
           <div className='flex gap-3 pt-3'>
             <div className='flex'>
-              <p>89</p>
+              <p>{user.follow.count}</p>
               <p className='text-gray-500'>Following</p>
             </div>
             <div className='flex'>
-              <p>17</p>
+              <p>{user.followedBy.count}</p>
               <p className='text-gray-500'>Followers</p>
             </div>
           </div>
