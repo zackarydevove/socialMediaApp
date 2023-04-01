@@ -2,9 +2,14 @@ import axios from "axios";
 
 const API_URL = `${process.env.REACT_APP_API_URL}/user`;
 
+const getToken = () => localStorage.getItem('jwtToken');
+
 export const updateUser = (userId, twitterName, description, link) => {
     return axios({
         method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             twitterName: twitterName,
             description: description,
@@ -22,6 +27,9 @@ export const updateUser = (userId, twitterName, description, link) => {
 export const updateSettings = (username, phone, email, country, age) => {
     return axios({
     method: 'PUT',
+    headers: {
+        Authorization: `Bearer ${getToken()}`
+    },
     data: {
         username: username,
         phone: phone,
@@ -41,6 +49,9 @@ export const updateSettings = (username, phone, email, country, age) => {
 export const updatePassword = (currentPassword, newPassword) => {
     return axios({
         method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             currentPassword: currentPassword,
             newPassword: newPassword
@@ -57,9 +68,13 @@ export const updatePassword = (currentPassword, newPassword) => {
 export const resetNotificationCount = () => {
     return axios({
         method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/notification/update`,
         }).then((res) => {
+            console.log('user in resetnotificationcount call api:', res);
             return (res.data);
         }).catch((err) => {
             return null;

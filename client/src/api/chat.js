@@ -3,12 +3,16 @@ import socket from "../socket";
 
 const API_URL = `${process.env.REACT_APP_API_URL}/chat`;
 
+const getToken = () => localStorage.getItem('jwtToken');
 
 export const createChat = (participants) => {
     return axios({
         method: 'POST',
         data: {
             participants: participants,
+        },
+        headers: {
+            Authorization: `Bearer ${getToken()}`
         },
         withCredentials: true,
         url: `${API_URL}/`
@@ -27,6 +31,9 @@ export const createChat = (participants) => {
 export const getChats = (userId) => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/${userId}`
     })
@@ -41,6 +48,9 @@ export const getChats = (userId) => {
 export const getParticipants = (chatId) => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/participants/${chatId}`
     })
@@ -55,6 +65,9 @@ export const getParticipants = (chatId) => {
 export const getMessages = (chatId, page) => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/${chatId}/messages/${page}`
     })
@@ -80,6 +93,9 @@ export const sendMessage = (chatId, content, sender, receiver) => {
 export const getLastMessage = (chatId) => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/${chatId}/lastmessage`
     })

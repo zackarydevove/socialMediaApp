@@ -1,4 +1,5 @@
 const User = require('../models/UserModel');
+const jwt = require('jsonwebtoken');
 
 module.exports.searchUsers = (req, res) => {
     const query = req.params.query;

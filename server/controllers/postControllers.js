@@ -1,9 +1,14 @@
 const User = require('../models/UserModel');
 const Post = require('../models/PostModel');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 module.exports.post = (req, res) => {
-    User.findOne(req.user._id)
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    User.findOne({ _id: userId })
     .then((user) => {
         const newPost = new Post({
             type: req.body.type, // Tweet or reply
@@ -33,15 +38,21 @@ module.exports.getPost = (req, res) => {
 };
 
 module.exports.deletePost = (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
+
   const postId = req.params.postId;
   Post.findOne({ _id: postId })
     .then((post) => {
-      if (post.creator.toString() === req.user._id.toString()) {
-        User.findOne(req.user._id)
+      if (post.creator.toString() === userId.toString()) {
+        User.findOne({ _id: userId })
           .then((user) => {
             user.post.splice(user.post.indexOf(postId), 1);
+            user.replies = user.replies.filter((replyId) => replyId.toString() !== postId.toString()); // Remove post ID from user.replies array
             user.save()
               .then(() => {
+                // Remove post from the original post's replies
                 if (post.type === 'reply') {
                   Post.findOne({ _id: post.repliedTo })
                     .then((postRepliedTo) => {
@@ -57,7 +68,7 @@ module.exports.deletePost = (req, res) => {
                     });
                 }
 
-                // Handle removing the post from the users who retweeted or liked it
+                // Remove deleted post from the users who retweeted or liked it
                 const usersToUpdate = [...post.retweet.users, ...post.likes.users];
                 User.updateMany(
                   { _id: { $in: usersToUpdate } },
@@ -74,7 +85,7 @@ module.exports.deletePost = (req, res) => {
                       .then(() => {
                         console.log("Post removed from users' notifications");
 
-                        // Add the following code to remove the post from the user's bookmarks array.
+                        // Remove the post from the user's bookmarks array.
                         User.updateMany(
                           { bookmarks: postId },
                           { $pull: { bookmarks: postId } }
@@ -82,7 +93,7 @@ module.exports.deletePost = (req, res) => {
                           .then(() => {
                             console.log("Post removed from users' bookmarks");
 
-                            // Continue with deleting the post
+                            // Delete the post
                             Post.findOneAndDelete({ _id: postId })
                               .then((post) => {
                                 console.log("Post deleted");
@@ -125,11 +136,15 @@ module.exports.deletePost = (req, res) => {
 };
 
 module.exports.like = (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
+
     // Find post liked
     Post.findOne({ _id: req.body.postId })
       .then((post) => {
         // Find user who liked
-        User.findOne(req.user._id)
+        User.findOne({ _id: userId })
           .then((user) => {
             if (post.likes.users.includes(user._id)) {
               // Unlike the post
@@ -142,9 +157,9 @@ module.exports.like = (req, res) => {
                 { new: true }
               )
                 .then(() => {
-                  // Update user's liked posts
+                  // Update user's liked posts array
                   User.findOneAndUpdate(
-                    { _id: req.user._id },
+                    { _id: userId },
                     { $pull: { likes: post._id } },
                     { new: true }
                   )
@@ -174,7 +189,7 @@ module.exports.like = (req, res) => {
                 .then(() => {
                   // Update user's liked posts
                   User.findOneAndUpdate(
-                    { _id: req.user._id },
+                    { _id: userId },
                     { $addToSet: { likes: post._id } },
                     { new: true }
                   )
@@ -231,11 +246,15 @@ module.exports.like = (req, res) => {
   };
 
 module.exports.reply = (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
+
     // Find post replied
     Post.findOne({_id: req.body.postId})
     .then((post) => {
         // Find user who replied
-        User.findOne(req.user._id)
+        User.findOne({ _id: userId })
         .then((user) => {
             const newReply = new Post({
                 type: 'reply',
@@ -255,7 +274,7 @@ module.exports.reply = (req, res) => {
                     user.save()
                     .then(() => {
                         // Find creator to create notification
-                        User.findOne(post.creator)
+                        User.findOne({ _id: post.creator })
                         .then((creator) => {
                             creator.notificationCount = creator.notificationCount || 0;
                             creator.notificationCount += 1;
@@ -285,12 +304,14 @@ module.exports.reply = (req, res) => {
 };
 
 module.exports.retweet = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
     const postId = req.body.postId;
-    const userId = req.user._id;
   
     Post.findOne({ _id: postId })
       .then((post) => {
-        User.findOne(userId)
+        User.findOne({ _id: userId })
           .then((user) => {
             if (post.retweet.users.includes(user._id)) {
               Post.findOneAndUpdate(
@@ -373,10 +394,12 @@ module.exports.retweet = (req, res) => {
   };
 
 module.exports.bookmark = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
     const postId = req.body.postId;
-    console.log('postid:', postId);
-    console.log('user:', req.user);
-    User.findById(req.user._id)
+
+    User.findById(userId)
     .then((user) => {
         // If already bookmark, then delete bookmarks from user bookmarks
         if (user.bookmarks.includes(postId)) {

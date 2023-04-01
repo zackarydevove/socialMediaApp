@@ -1,5 +1,6 @@
 const User = require('../models/UserModel');
 const Post = require('../models/PostModel');
+const jwt = require('jsonwebtoken');
 
 // Get 10 post
 module.exports.getFeed = (req, res) => {

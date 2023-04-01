@@ -3,13 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "14.x"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
-    "build": "npm i"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +20,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "graphql": "^16.6.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.2",
     "nodemon": "^2.0.21",
     "passport": "^0.6.0",

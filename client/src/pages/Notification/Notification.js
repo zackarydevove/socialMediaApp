@@ -19,23 +19,25 @@ function Notification() {
     useEffect(() => {
         getUser()
         .then((res) => {
-            setUser(res)
+            console.log('res in notificaiton getuser:', res);
+            setUser(res);
+            setLoading(false);
+            // Reset notification count to zero
             if (res.notificationCount > 0) {
                 resetNotificationCount()
                 .then((updatedUser) => {
+                    console.log('user in notification getuser:', updatedUser);
                     setUser(updatedUser)
+                    console.log('user in notification user:', user);
+                    setLoading(false);
                     console.log('notification reset');
                 })
                 .catch((err) => console.log(err));
             }
         })
         .catch((err) => console.log(err));
-        // Reset notification count to zero
     }, [loading])
 
-    useEffect((user) => {
-        setLoading(false);
-    })
 
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>

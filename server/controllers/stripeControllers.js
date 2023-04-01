@@ -1,5 +1,5 @@
-
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
+const jwt = require('jsonwebtoken');
 
 module.exports.stripe = (req, res) => {
     const item = req.body.item;

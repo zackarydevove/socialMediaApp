@@ -68,7 +68,6 @@ function Conversation({actualChatId, setActualChatId, currentUser, messages, set
       })
 
       socket.on('joined_chat', (chatId, userIds) => {
-        setParticipants((prev) => [...prev, ...userIds]);
         setUpdateMessagePage((prev) => !prev);
       })
     

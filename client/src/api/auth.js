@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const API_URL = `${process.env.REACT_APP_API_URL}/auth`;
 
+const getToken = () => localStorage.getItem('jwtToken');
+
 export const login = (usernameOrEmail, password) => {
     return axios({
       method: 'POST',
@@ -13,7 +15,9 @@ export const login = (usernameOrEmail, password) => {
       url: `${API_URL}/login`,
     })
     .then((res) => {
-        return (res.data);
+        console.log('res in in login:', res);
+        localStorage.setItem('jwtToken', res.data.token);
+        return (res.data.message);
     })
     .catch((err) => {
         return null;
@@ -32,31 +36,23 @@ export const register = (username, email, password, confirmPassword) => {
         withCredentials: true,
         url: `${API_URL}/register`,
     }).then((res) => {
-        return (res.data);
+        localStorage.setItem('jwtToken', res.data.token);
+        return (res.data.message);
     }).catch((err) => {
         return null;
     });
 }
-
-export const logout = () => {
-    return axios({
-        method: 'POST',
-        withCredentials: true,
-        url: `${API_URL}/logout`,
-    }).then((res) => {
-        return (res.data);
-    }).catch((err) => {
-        return null;
-    });
-}
-
 
 export const getUser = () => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/user`,
     }).then((res) => {
+        console.log('res in getUser:', res);
         return (res.data);
     }).catch((err) => {
         return null;
@@ -66,6 +62,9 @@ export const getUser = () => {
 export const getProfile = (username) => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url:  `${API_URL}/user/profile/${username}`,
     }).then((res) => {
@@ -79,6 +78,9 @@ export const getProfile = (username) => {
 export const getCreator = (creatorId) => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url:  `${API_URL}/user/creator/${creatorId}`,
     }).then((res) => {
@@ -92,6 +94,9 @@ export const getCreator = (creatorId) => {
 export const getRandomUsers = () => {
     return axios({
         method: 'GET',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url:  `${API_URL}/user/random`,
     }).then((res) => {

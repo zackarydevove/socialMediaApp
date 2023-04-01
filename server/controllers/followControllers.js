@@ -1,8 +1,11 @@
 const User = require('../models/UserModel');
+const jwt = require('jsonwebtoken');
 
 module.exports.follow = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const currentUserId = decoded.userId;
     const userIdToFollow = req.body.userIdToFollow;
-    const currentUserId = req.user._id;
 
     console.log('userIdToFollow:', userIdToFollow, '\n');
     console.log('currentUserId:', currentUserId, '\n')

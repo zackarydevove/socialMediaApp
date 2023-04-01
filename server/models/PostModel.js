@@ -29,7 +29,7 @@ const postSchema = new mongoose.Schema({
         users: { 
             type: [mongoose.ObjectId], 
             default: []
-        },  
+        },
         count: { 
             type: Number, 
             default: 0 

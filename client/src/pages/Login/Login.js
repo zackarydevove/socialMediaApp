@@ -47,14 +47,14 @@ function Login(props) {
                 <h1 className='text-3xl font-bold'>Sign in to Twitter</h1>
             
                     {/* Google */}
-                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'
-                        onClick={handleGoogleLogin}>
+                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'>
+                        {/* onClick={handleGoogleLogin} */}
                         <FcGoogle size={'1.3em'} />
                         <p>Sign up with Google</p>
                     </div>
                     {/* Meta */}
-                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'
-                        onClick={handleFacebookLogin}>
+                    <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-200 rounded-3xl hover:cursor-pointer gap-2'>
+                        {/* onClick={handleFacebookLogin} */}
                         <BsMeta size={'1.3em'} />
                         <p>Sign up with Meta</p>
                     </div>
@@ -107,9 +107,6 @@ function Login(props) {
                             props.setRegisterClick(true);
                             props.setLoginClick(false);
                         }}>Sign up</button>
-                    </div>
-                    <div>
-                        <p className='text-xs'>Demo account: demo / Demo1234$</p>
                     </div>
             </div>
         </div>

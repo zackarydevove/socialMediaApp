@@ -2,6 +2,8 @@ import axios from "axios"
 
 const API_URL = `${process.env.REACT_APP_API_URL}/stripe`
 
+const getToken = () => localStorage.getItem('jwtToken');
+
 export const checkout = (plan) => {
     let item;
     if (plan === 1) {
@@ -18,6 +20,9 @@ export const checkout = (plan) => {
     }
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             item: item
         },

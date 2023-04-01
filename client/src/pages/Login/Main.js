@@ -65,14 +65,14 @@ function Main() {
                       {/* Login / Signup */}
                       <div className='flex flex-col gap-3 mt-7'>
                           {/* Google */}
-                          <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-500 rounded-3xl hover:cursor-pointer gap-2'
-                            onClick={handleGoogleLogin}>
+                          <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-500 rounded-3xl hover:cursor-pointer gap-2'>
+                            {/* onClick={handleGoogleLogin} */}
                               <FcGoogle size={'1.3em'} />
                               <p>Sign up with Google</p>
                           </div>
                           {/* Meta */}
-                          <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-500 rounded-3xl hover:cursor-pointer gap-2'
-                            onClick={handleFacebookLogin}>
+                          <div className='w-[300px] h-[40px] flex justify-center items-center border border-gray-500 rounded-3xl hover:cursor-pointer gap-2'>
+                            {/* onClick={handleFacebookLogin} */}
                               <BsMeta size={'1.3em'} />
                               <p>Sign up with Meta</p>
                           </div>

@@ -15,23 +15,30 @@ function Navbar(props) {
   const [openProfile, setOpenProfile] = useState(false);
   const [user, setUser] = useState({});
   const [openTwitterBlue, setOpenTwitterBlue] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getUser()
-    .then((res) => setUser(res))
-    .catch((err) => console.log('Error during fetching user', err));
-  }, [])
+      .then((res) => {
+        setUser(res);
+        console.log('in nav:', res);
+        setLoading(false); 
+      })
+      .catch((err) => {
+        console.log('Error during fetching user', err);
+        setLoading(false);
+      });
+  }, []);
 
   const handleLogout = () => {
-    logout()
-    .then((res) => {
-      if (res === 'Logout successfully') {
-        navigate('/');
-      };
-    })
-    .catch((err) => console.log('Error during logout', err));
+    localStorage.removeItem('jwtToken');
+    navigate('/');
+  }
+  
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (

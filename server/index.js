@@ -20,10 +20,6 @@ const io = configureSockets(server);
 connectToDatabase();
 configureMiddleware(app);
 
-app.get("/", (req, res) => {
-  res.send("Test Express on Vercel");
-});
-
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/follow', followRoutes);
@@ -36,5 +32,3 @@ app.use('/api/user', userRoutes);
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-
-module.exports = app;

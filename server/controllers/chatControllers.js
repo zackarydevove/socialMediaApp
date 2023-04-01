@@ -1,11 +1,15 @@
 const Chat = require('../models/ChatModel');
 const Message = require('../models/MessageModel');
 const User = require('../models/UserModel');
+const jwt = require('jsonwebtoken');
 
 // Create a new Chat and save the chatId in each participants chat
 module.exports.createChat = (req, res) => {
   const participants = req.body.participants;
-  
+  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
+
   // If there is already a chat where there is all the participants, redirect them
   Chat.findOne({ participants: { $all: participants } })
     .then(existingChat => {
@@ -19,9 +23,9 @@ module.exports.createChat = (req, res) => {
         .then((chat) => {
           // Update participants' chat arrays with the new chat's ID
           const chatId = chat._id;
-          const updateUserChatsPromises = participants.map((userId) =>
+          const updateUserChatsPromises = participants.map((participantId) =>
             User.findByIdAndUpdate(
-              userId,
+              participantId,
               { $push: { chat: chatId } },
               { new: true, useFindAndModify: false }
             )
@@ -45,7 +49,10 @@ module.exports.createChat = (req, res) => {
 
 // Get all chatsIds of user (for chat dashboard)
 module.exports.getChats = (req, res) => {
-  const userId = req.params.userId;
+  // const userId = req.params.userId;
+  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const userId = decoded.userId;
 
   User.findById(userId)
     .populate('chat')
@@ -94,7 +101,9 @@ module.exports.getChats = (req, res) => {
 // Get data of the other participant in a chat
 module.exports.getParticipants = (req, res) => {
   const chatId = req.params.chatId;
-  const currentUserId = req.user._id;
+  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const currentUserId = decoded.userId;
 
   // Find the chat by chatId
   Chat.findById(chatId)

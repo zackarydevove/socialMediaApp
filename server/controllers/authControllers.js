@@ -1,23 +1,23 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/UserModel');
-const passport = require('passport');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
-module.exports.googleAuth = passport.authenticate('google', { scope: ['profile'] });
+// module.exports.googleAuth = passport.authenticate('google', { scope: ['profile'] });
 
-module.exports.googleCallback = passport.authenticate('google', { 
-    failureRedirect: `${CLIENT_URL}/`, 
-    successRedirect: `${CLIENT_URL}/home`
-    });
+// module.exports.googleCallback = passport.authenticate('google', { 
+//     failureRedirect: `${CLIENT_URL}/`, 
+//     successRedirect: `${CLIENT_URL}/home`
+//     });
 
-module.exports.facebookAuth = passport.authenticate('facebook', { scope: ['profile'] });
+// module.exports.facebookAuth = passport.authenticate('facebook', { scope: ['profile'] });
 
-module.exports.facebookCallback = passport.authenticate('facebook', {
-    failureRedirect: `${CLIENT_URL}/`, 
-    successRedirect: `${CLIENT_URL}/home`
-    });
+// module.exports.facebookCallback = passport.authenticate('facebook', {
+//     failureRedirect: `${CLIENT_URL}/`, 
+//     successRedirect: `${CLIENT_URL}/home`
+//     });
 
 module.exports.register = (req, res) => {
     User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] })
@@ -25,14 +25,14 @@ module.exports.register = (req, res) => {
         if (user) {
             if (user.email === req.body.email && user.username === req.body.username) {
                 console.log('Email and username already used');
-                res.send('Email and username already used');
+                res.json({message: 'Email and username already used'});
             }
             else if (user.email === req.body.email) {
                 console.log('Email already used')
-                res.send('Email already used!');
+               res.json({message: 'Email already used!'});
             } else if (user.username === req.body.username) {
                 console.log('Username already used');
-                res.send('Username already used');
+               res.json({message: 'Username already used'});
             }
         } else {
             if (req.body.password === req.body.confirmPassword) {
@@ -47,16 +47,14 @@ module.exports.register = (req, res) => {
                     newUser.save()
                     .then((response) => {
                         console.log('new user created:\n', response, '\n');
-                        req.logIn(newUser, (err) => {
-                            if (err) return (next(err));
-                            res.send('User successfully created and authenticated');
-                        })
+                        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET)
+                        res.status(200).json({ token: token, message: 'User successfully created and authenticated' });
                     })
                     .catch((err) => console.log(err));
                 })
                 .catch((err) => console.log(err));
             } else {
-                res.send('Password doesnt match');
+                res.status(401).json({message: 'Password doesnt match'});
             }
         }
     })
@@ -65,37 +63,68 @@ module.exports.register = (req, res) => {
 
 module.exports.login = (req, res, next) => {
     console.log(req.body);
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return (next(err));
+    User.findOne({ $or: [{ email: req.body.usernameOrEmail }, { username: req.body.usernameOrEmail }] })
+      .then(user => {
         if (!user) {
-            console.log('user not found');
-            return (res.send('no user exists'))
-        };
-        req.logIn(user, (err) => {
-            if (err) return (next(err));
-            res.send('Successfully Authenticated');
-            console.log(req.user);              
-        })
-    })(req,res,next);
+            console.log('User not found')
+            return res.status(401).json({ message: 'Authentication failed' });
+        }
+        console.log('User found:', user);
+        bcrypt.compare(req.body.password, user.password)
+          .then(isMatch => {
+            if (isMatch) {
+                console.log(user, 'Successfully Authenticated')
+                const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+                res.status(200).json({ token: token, message: 'Successfully Authenticated' });
+            } else {
+                console.log('Wrong password')
+                res.status(401).send('Authentication failed');
+            }
+          });
+      })
+      .catch(err => {
+        res.status(500).json({ message: 'Internal server error' });
+      });
 }
 
-module.exports.logout = (req, res) => {
-    req.logout((err) => {
-        if (err) console.log(err);
-        else res.send('Logout successfully');
-    });
-};
+// module.exports.logout = (req, res) => {
+//     req.logout((err) => {
+//         if (err) console.log(err);
+//         else res.send('Logout successfully');
+//     });
+// };
 
 // Check if user is authenticate, if not redirect him to /login
 module.exports.root = (req, res) => {
-    if (!req.user) {
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    if (!userId) {
         res.redirect(`${CLIENT_URL}/login`);
     }
 };
 
-// req.user contain all the data in of user in the cookie
+
 module.exports.getUser = (req, res) => {
-    res.send(req.user);
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+  
+    console.log('id in getUser:', userId);
+    User.findById(userId)
+      .then((user) => {
+        if (!user) {
+            res.status(401).send('User not found');
+        } else {
+            console.log('user in getUser:', user)
+            res.send(user);
+        }
+        })
+      .catch((err) => {
+            console.log(err);
+            res.status(500).send('Internal server error');
+        });
 };
 
 module.exports.getProfile = (req, res) => {
@@ -122,7 +151,11 @@ module.exports.getCreator = (req, res) => {
 }
 
 module.exports.getRandom = (req, res) => {
-    const currentUserId = new mongoose.Types.ObjectId(req.user._id); // Convert the current user's _id to an ObjectId
+    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+
+    const currentUserId = new mongoose.Types.ObjectId(userId); // Convert the current user's _id to an ObjectId
 
     User.aggregate([
         { $match: { _id: { $ne: currentUserId } } }, // Exclude the current user

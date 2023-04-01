@@ -50,7 +50,7 @@ function TweetBlock({postId, setUpdate}) {
     // Like
     const handleLikeTweet = () => {
         likeTweet(postId)
-        .then((res) => {
+        .then(() => {
             setRefresh((prev) => !prev);
         })
         .catch((err) => console.log('Error during like', err));
@@ -81,6 +81,7 @@ function TweetBlock({postId, setUpdate}) {
     const handleBookmark = () => {
         bookmark(postId)
         .then((res) => {
+            setUpdate((prev) => !prev);
             setRefresh((prev) => !prev);
             setOpenOptions(false);
             console.log('Bookmark successful');

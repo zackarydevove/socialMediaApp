@@ -1,11 +1,15 @@
 import axios from "axios";
 
-
 const API_URL = `${process.env.REACT_APP_API_URL}/post`;
+
+const getToken = () => localStorage.getItem('jwtToken');
 
 export const postTweet = (content) => {
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             type: 'Post',
             content: content,
@@ -24,6 +28,9 @@ export const postTweet = (content) => {
 export const getPost = (postId) => {
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
           postId: postId,
         },
@@ -41,6 +48,9 @@ export const getPost = (postId) => {
 export const likeTweet = (postId) => {
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             postId: postId,
         },
@@ -57,6 +67,9 @@ export const likeTweet = (postId) => {
 export const deleteTweet = (postId) => {
     return axios({
         method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         withCredentials: true,
         url: `${API_URL}/delete/${postId}`
     }).then((res) => {
@@ -70,6 +83,9 @@ export const deleteTweet = (postId) => {
 export const replyTweet = (postId, replyContent) => {
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             replyContent: replyContent,
             postId: postId,
@@ -88,6 +104,9 @@ export const replyTweet = (postId, replyContent) => {
 export const retweet = (postId) => {
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             postId: postId,
         },
@@ -105,6 +124,9 @@ export const retweet = (postId) => {
 export const bookmark = (postId) => {
     return axios({
         method: 'POST',
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        },
         data: {
             postId: postId,
         },
