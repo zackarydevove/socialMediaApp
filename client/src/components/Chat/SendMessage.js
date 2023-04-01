@@ -44,7 +44,7 @@ function SendMessage({chatId, sender, receiver, onSentMessage}) {
                             <BsFillEmojiSmileFill size={'1.2em'} className='hover:cursor-pointer hover:text-blue-500'
                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
                             {showEmojiPicker && (
-                                <div className='absolute bottom-16 z-30'>
+                                <div className='absolute max-sm:-left-16 bottom-10 z-30'>
                                     <Picker
                                         onEmojiSelect={addEmoji}
                                         theme='dark'

@@ -46,8 +46,8 @@ function ProfileInfo({
         }
         {/* Banner */}
         <div className='pb-[150px] sm:pb-[120px]'>
-            <div className='w-full h-[200px] absolute bg-banner bg-cover' />
-        </div>
+            <div className='w-full h-[200px] absolute bg-banner bg-cover bg-center' />
+        </div> 
 
         {/* Info */}
         <div className='p-3'>

@@ -8,11 +8,15 @@ import Terms from '../../components/More/Terms';
 import { getUser } from '../../api/auth';
 import TweetBlock from '../../components/Tweet/TweetBlock';
 import Navbarsm from '../../components/More/Navbarsm';
+import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 function Bookmarks() {
     const [openNav, setOpenNav] = useState(false);
     const [user, setUser] = useState({});
     const [update, setUpdate] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         getUser()
@@ -41,8 +45,10 @@ function Bookmarks() {
                 </div>
                 <div>
                     {/* left */}
-                    <div className='flex justify-between p-3'>
-                        <div className='flex flex-col'>
+                    <div className='flex p-3'>
+                        <AiOutlineArrowLeft size={'1.5em'} className='sm:hidden'
+                                    onClick={() => navigate(-1)}/>
+                        <div className='flex flex-col max-sm:pl-5'>
                             <h1 className='text-xl font-bold'>Bookmarks</h1>
                             <p className='text-sm text-gray-500'>@{user.username}</p>
                         </div>

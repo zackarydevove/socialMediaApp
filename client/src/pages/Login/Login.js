@@ -70,13 +70,13 @@ function Login(props) {
                     <div className='flex flex-col gap-3'>
                         {/* Username */}
                         <div className={`h-14 w-[300px] border flex p-3 ${notValid ? 'border-red-500' : ''}`}>
-                            <input type='text' placeholder='Email, or username' value={id}
+                            <input type='text' placeholder='Email, or username' value={id} className='w-full outline-none'
                                 onChange={e => setId(e.target.value)}></input>
                         </div>
                         {/* Password */}
                         <div className={`h-14 w-[300px] border flex p-3 ${notValid ? 'border-red-500' : ''}`}>
-                            <input type='password' placeholder='Password' value={password}
-                                onChange={e => setPassword(e.target.value)}></input>
+                            <input type='password' placeholder='Password' value={password} className='w-full outline-none'
+                                onChange={e => setPassword(e.target.value)} ></input>
                         </div>
                     {
                         notValid ?

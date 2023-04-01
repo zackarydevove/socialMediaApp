@@ -75,9 +75,9 @@ function AccountInfo({user, setUpdateUser, setUser, setShow}) {
         <div className='p-3 flex flex-col gap-3'>
 
             <div className={`flex justify-between items-center p-1 px-2 ${editUsername ? 'border border-blue-500' : ''}`}>
-                <div className='flex flex-col'>
+                <div className='flex flex-col w-full'>
                     <p className={`${editUsername ? 'text-blue-500' : ''}`}>Username</p>
-                    <input className={`text-sm ${editUsername ? 'text-white' : 'text-gray-500'} outline-none bg-black`}
+                    <input className={`text-sm ${editUsername ? 'text-white' : 'text-gray-500'} bg-black outline-none w-full`}
                             readOnly={!editUsername}
                             value={username}
                             onChange={e => setUsername(e.target.value)}></input>
@@ -101,9 +101,9 @@ function AccountInfo({user, setUpdateUser, setUser, setShow}) {
             </div>
 
             <div className={`flex justify-between items-center p-1 px-2 ${editPhone ? 'border border-blue-500' : ''}`}>
-                <div className='flex flex-col'>
+                <div className='flex flex-col w-full'>
                     <p className={`${editPhone ? 'text-blue-500' : ''}`}>Phone</p>
-                    <input className={`text-sm ${editPhone ? 'text-white' : 'text-gray-500'} outline-none bg-black`}
+                    <input className={`text-sm ${editPhone ? 'text-white' : 'text-gray-500'} outline-none bg-black w-full`}
                             readOnly={!editPhone}
                             value={phone}
                             onChange={e => setPhone(e.target.value)}></input>
@@ -122,9 +122,9 @@ function AccountInfo({user, setUpdateUser, setUser, setShow}) {
             </div>
 
             <div className={`flex justify-between items-center p-1 px-2 ${editEmail ? 'border border-blue-500' : ''}`}>
-                <div className='flex flex-col'>
+                <div className='flex flex-col w-full'>
                     <p className={`${editEmail ? 'text-blue-500' : ''}`}>Email</p>
-                    <input className={`text-sm ${editEmail ? 'text-white' : 'text-gray-500'} outline-none bg-black`}
+                    <input className={`text-sm ${editEmail ? 'text-white' : 'text-gray-500'} outline-none bg-black w-full`}
                             readOnly={!editEmail}
                             value={email}
                             onChange={e => setEmail(e.target.value)}></input>
@@ -167,9 +167,9 @@ function AccountInfo({user, setUpdateUser, setUser, setShow}) {
         <div className='p-3 flex flex-col gap-3'>
             
         <div className={`flex justify-between items-center p-1 px-2 ${editCountry ? 'border border-blue-500' : ''}`}>
-                <div className='flex flex-col'>
+                <div className='flex flex-col w-full'>
                     <p className={`${editCountry ? 'text-blue-500' : ''}`}>Country</p>
-                    <input className={`text-sm ${editCountry ? 'text-white' : 'text-gray-500'} outline-none bg-black`}
+                    <input className={`text-sm ${editCountry ? 'text-white' : 'text-gray-500'} outline-none bg-black w-full`}
                             readOnly={!editCountry}
                             value={country}
                             onChange={e => setCountry(e.target.value)}></input>
@@ -195,9 +195,9 @@ function AccountInfo({user, setUpdateUser, setUser, setShow}) {
             </div>
 
             <div className={`flex justify-between items-center p-1 px-2 ${editAge ? 'border border-blue-500' : ''}`}>
-                <div className='flex flex-col'>
+                <div className='flex flex-col w-full'>
                     <p className={`${editAge ? 'text-blue-500' : ''}`}>Age</p>
-                    <input className={`text-sm ${editAge ? 'text-white' : 'text-gray-500'} outline-none bg-black`}
+                    <input className={`text-sm ${editAge ? 'text-white' : 'text-gray-500'} outline-none bg-black w-full`}
                             readOnly={!editAge}
                             value={age}
                             onChange={e => setAge(e.target.value)}></input>

@@ -6,13 +6,14 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { FiTrash2 } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import Reply from './Reply';
-import { getUser } from '../../api/auth';
+import { getUser, getCreator } from '../../api/auth';
 import { likeTweet, deleteTweet, retweet } from '../../api/post';
 import { formatDate } from '../../utils/formatDate';
 import { bookmark } from '../../api/post';
 
 function MainThreadTweet({post, setPost, setRefresh}) {
     const [user, setUser] = useState({});
+    const [creator, setCreator] = useState({});
     const [openDelete, setOpenDelete] = useState(false);
     const [openReply, setOpenReply] = useState(false);
 
@@ -23,6 +24,12 @@ function MainThreadTweet({post, setPost, setRefresh}) {
         .then((res) => setUser(res))
         .catch((err) => console.log('Error during fetching user', err));
     }, [post]);
+
+    useEffect(() => {
+        getCreator(post.creator)
+        .then((res) => setCreator(res))
+        .catch((err) => console.log(err));
+    }, []);
 
     // Like
     const handleLikeTweet = () => {
@@ -81,8 +88,8 @@ function MainThreadTweet({post, setPost, setRefresh}) {
                         <div className='w-12 h-12 bg-pp bg-cover rounded-full hover:cursor-pointer'/>
 
                         <div className='flex flex-col pl-2'>
-                            <p className='text-ellipsis overflow-hidden hover:cursor-pointer z-10'>{post.twittername || 'abc'}</p>
-                            <p className='text-gray-500 text-ellipsis overflow-hidden z-10'>{post.username || 'abc'}</p>
+                            <p className='text-ellipsis overflow-hidden hover:cursor-pointer z-10'>{creator.twittername}</p>
+                            <p className='text-gray-500 text-ellipsis overflow-hidden z-10'>@{creator.username}</p>
                         </div>
                     </div>
                     <div className='h-fit z-20 hover:shadow-[0px_0px_1px_7px_rgba(29,155,240,0.2)] hover:bg-[#1d9bf0] hover:bg-opacity-20 rounded-full'>

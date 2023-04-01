@@ -34,7 +34,7 @@ function Main() {
         navigate('/home');
     } else {
         return (
-          <div className='h-screen flex flex-col overflow-hidden'>
+          <div className='h-screen flex flex-col overflow-scroll'>
               {
                   loginClick ? 
                   <Login setLoginClick={setLoginClick} setRegisterClick={setRegisterClick}/> 
@@ -54,13 +54,15 @@ function Main() {
                       <BsTwitter size={'22.5em'} className='text-white'/>
                   </div>
                   {/* Right */}
-                  <div className='lg:w-[800px] h-screen lg:min-w-[437px] p-8 pt-16 pb-16 flex flex-col'>
-                      <BsTwitter size={'3em'} className='text-blue-500'/>
+                  <div className='max-lg:justify-center max-lg:items-center lg:w-[800px] h-screen lg:min-w-[437px] p-8 pt-16 pb-16 flex flex-col'>
+                        <div>
+                        <BsTwitter size={'3em'} className='text-blue-500'/>
+                        </div>
                       <div>
-                          <h1 className='text-7xl font-bold mt-14'>Happening now</h1>
+                          <h1 className='text-7xl font-bold mt-14 max-lg:text-center max-sm:text-5xl'>Happening now</h1>
                       </div>
                       <div>
-                          <h2 className='text-3xl font-bold mt-14'>Join Twitter today</h2>
+                          <h2 className='text-3xl font-bold mt-14 max-lg:text-center'>Join Twitter today</h2>
                       </div>
                       {/* Login / Signup */}
                       <div className='flex flex-col gap-3 mt-7'>
@@ -108,7 +110,7 @@ function Main() {
               </div>
       
               {/* Footer */}
-              <div className='p-3 flex justify-center items-center flex-wrap gap-4'>
+              <div className='p-3 flex justify-center items-center flex-wrap gap-4 max-sm:pt-7'>
                   {
                   ['About','Help Center','Terms of Service','Privacy Policy','Cookie Policy','Accessibility','Ads info','Blog','Status','Careers','Brand Resources','Advertising','Marketing','Twitter for Business','Developers','Directory','Settings','© 2023 Twitter','Inc.'].map((item) => {
                       return (

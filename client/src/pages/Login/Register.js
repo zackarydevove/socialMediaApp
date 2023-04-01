@@ -52,7 +52,7 @@ function Register(props) {
                     <div className='flex flex-col gap-3'>
                         {/* Username */}
                         <div className={`h-14 w-[300px] border ${usernameUsed ? 'border-red-500' : ''} flex p-3`}>
-                            <input type='username' placeholder='Username' value={username}
+                            <input type='username' placeholder='Username' value={username} className='w-full outline-none'
                              onChange={(e) => {
                                 setUsername(e.target.value);
                                 setUsernameUsed(false);
@@ -68,8 +68,8 @@ function Register(props) {
                         }
                         {/* Email */}
                         <div className={`h-14 w-[300px] border ${emailUsed ? 'border-red-500' : ''} flex p-3`}>
-                            <input type='email' placeholder='Email' value={email}
-                             onChange={(e) => {
+                            <input type='email' placeholder='Email' value={email} className='w-full outline-none'
+                             onChange={(e) => { 
                                 setEmail(e.target.value);
                                 setEmailUsed(false);
                              }}></input>
@@ -82,14 +82,14 @@ function Register(props) {
                             : null
                         }
                         {/* Password */}
-                        <div className={`h-14 w-[300px] border flex p-3 ${password !== confirmPassword ? 'border-red-500' : ''}`} value={password}
+                        <div className={`h-14 w-[300px] border flex p-3 ${password !== confirmPassword ? 'border-red-500' : ''}`} value={password} 
                              onChange={(e) => setPassword(e.target.value)}>
-                            <input type='password' placeholder='Password'></input>
+                            <input type='password' placeholder='Password' className='w-full outline-none'></input>
                         </div>
                         {/* Confirm Password */}
                         <div className={`h-14 w-[300px] border flex p-3 ${password !== confirmPassword ? 'border-red-500' : ''}`} value={confirmPassword}
                              onChange={(e) => setConfirmPassword(e.target.value)}>
-                            <input type='password' placeholder='Confirm password'></input>
+                            <input type='password' placeholder='Confirm password' className='w-full outline-none'></input>
                         </div>
                         {
                             password !== confirmPassword ?

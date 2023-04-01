@@ -65,7 +65,7 @@ function Feed() {
                 <div>
                     <h1 className='max-sm:hidden text-xl font-bold p-3'>Home</h1>
                     <div className='sm:hidden w-screen flex justify-center items-center relative p-3'>
-                        <div className='h-8 w-8 bg-blue-900 rounded-full absolute top-3 left-3' onClick={() => setOpenNav(!openNav)} />
+                        <div className='h-8 w-8 bg-pp bg-cover bg-center rounded-full absolute top-3 left-3' onClick={() => setOpenNav(!openNav)} />
                         <AiOutlineTwitter size={'1.8em'} className='text-blue-500'/>
                     </div>
                     <div className='flex justify-center items-center'>

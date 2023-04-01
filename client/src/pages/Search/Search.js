@@ -32,8 +32,9 @@ function Search() {
                     <PostTweetButton/>
                 </div>
                 <div className='flex justify-around items-center'>
-                    <div className='sm:hidden'>
-                        <AiOutlineArrowLeft size={'2em'} onClick={() => navigate('/home')}/>
+                    <div className='sm:hidden pl-3'>
+                        <AiOutlineArrowLeft size={'1.5em'} className='sm:hidden'
+                                    onClick={() => navigate(-1)}/>
                     </div>
                     <SearchBar SearchPage={true}/>
                 </div>

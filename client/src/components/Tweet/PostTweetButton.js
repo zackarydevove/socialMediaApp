@@ -14,7 +14,7 @@ function PostTweetButton({setUpdate}) {
           : null
         }
           <div className='xl:w-full xl:h-12 w-14 h-14 bg-blue-500 rounded-full flex justify-center items-center hover:bg-blue-600'
-        onClick={() => setOpenTweet(true)}>
+            onClick={() => setOpenTweet(true)}>
               <AiOutlinePlus size={'2.3em'} className='xl:hidden'/>
               <p className='max-xl:hidden text-lg w-[230px] text-center'>Tweet</p>
           </div>

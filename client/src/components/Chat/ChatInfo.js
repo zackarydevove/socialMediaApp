@@ -41,7 +41,7 @@ function ChatInfo(
             <p className='pl-3 font-bold text-lg'>Group name</p>
           </div>
           <div className='flex items-center'>
-            <button className='text-blue-600 hover:underline'>Edit</button>
+            <button className='text-blue-600 hover:underline'>Soon</button>
           </div>
         </div>
 
@@ -76,7 +76,7 @@ function ChatInfo(
                     <p className='text-gray-500'>@{member.username}</p>
                   </div>
                 </div>
-                <button className='py-1 px-5 bg-white text-black rounded-3xl'>Follow</button>
+                {/* <button className='py-1 px-5 bg-white text-black rounded-3xl'>Follow</button> */}
               </div>
             ))
           }
