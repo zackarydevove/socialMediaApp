@@ -75,8 +75,8 @@ function Profile() {
                         </div>
                             
                         <div>
-                            <h1>Zackary Devove</h1>
-                            <p className='text-sm text-gray-500'>25 Tweets</p>
+                            <h1>{userProfile.twittername}</h1>
+                            <p className='text-sm text-gray-500'></p>
                         </div>
                     </div>
                     <div>
