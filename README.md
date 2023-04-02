@@ -1,50 +1,39 @@
 <h1> Social Media App - Twitter Clone </h1>
 
-This is a Twitter Clone with extra features, implemented using React, Tailwind, Node, Express, PostgreSQL, RESTFul API, GraphQL, Authentication, WebSocket, and Notification technologies.
+This is a Fullstack Twitter Clone implemented using React, Tailwind, Node, Express, MongoDB and Socket.io fully responsive.
 
 <h2> Demo </h2>
-Soon! You can follow the progress on my social media  <a href='https://twitter.com/ZackaryDevove'>Twitter</a> or <a href='https://www.linkedin.com/in/zackarydevove/'>LinkedIn</a>
+You can check the live demo <a href="https://social-media-app-ruby.vercel.app/">here</a>
 
 <h2> Features </h2>
 
 <ul>
-<li>Authentication: Local and Oauth2</li>
-<li>WebSocket for real-time chat</li>
+<li>Authentication: Local with JWT and Oauth2 with Passport</li>
+<li>Socket.io for real-time chat</li>
+<li>Can Post, like, share, reply, bookmark and delete content</li>
+<li>Can Follow and Unfollow users</li>
+<li>Can search for users to follow</li>
 <li>Notifications</li>
 <li>User profile management</li>
+<li>User settings management</li>
 <li>Contact list management</li>
-<li>Multi-language support</li>
-<li>Dark mode</li>
-<li>Can Post, like, share, and reply content</li>
-<li>Can Bookmarks content</li>
-<li>Can Follow and direct message other users</li>
-<li>Chat rooms with Admin power</li>
-<li>Can Post pictures, videos, documents, and other files</li>
-<li>Emojis and GIFs</li>
-<li>Voice and video calls</li>
-<li>Typing indicators</li>
-<li>Message search in the chat</li>
-<li>Admin power: Room creator as owner can modify password, kick people, mute, and set others as admin</li>
-<li>Pin messages</li>
-<li>Reply to messages</li>
+<li>Twitter Blue subscription with Stripe payments</li>
+<li>Can create group Chat rooms</li>
+<li>Can invite more people in Chat rooms or leave Chat rooms</li>
+<li>Can post emojis</li>
 <li>Message deletion for self and others</li>
-<li>Audio messages</li>
-<li>Message reactions (like, love, angry, etc.)</li>
+
 </ul>
 
 
 <h2>Tech Stack</h2>
 <ul>
-<li>React: Frontend JavaScript library for building user interfaces.</li>
-<li>Tailwind: CSS framework for styling the app.</li>
-<li>Node: Backend JavaScript runtime environment.</li>
-<li>Express: Web application framework for Node.</li>
-<li>PostgreSQL: Open-source relational database management system.</li>
-<li>RESTFul API: API architecture for the app.</li>
-<li>GraphQL: Query language for APIs.</li>
-<li>Authentication: Used for user authentication.</li>
-<li>WebSocket: Real-time communication between server and clients.</li>
-<li>Notification: Used to send push notifications to users.</li>
+<li>React</li>
+<li>Tailwind CSS</li>
+<li>Node</li>
+<li>Express</li>
+<li>MongoDB</li>
+<li>Socket.io</li>
 </ul>
 
 <h2> Conclusion </h2>
