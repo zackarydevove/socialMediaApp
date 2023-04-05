@@ -7,7 +7,6 @@ function Contact({chatId, setActualChatId, actualChatId, setMessages}) {
   const [participants, setParticipants] = useState([]);
   const [lastMessage, setLastMessage] = useState(null);
 
-  // Function to get the other participants information
   useEffect(() => {
     getParticipants(chatId)
     .then((otherUsers) => {

@@ -10,7 +10,6 @@ import ChatInfo from './ChatInfo';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 
-// One conversation/chat, fetch the messages and show them in Chat, send Messages aswell
 function Conversation({actualChatId, setActualChatId, currentUser, messages, setMessages, setUpdateMessagePage, setOpenAddMember, participants, setParticipants}) {
   const [typingUsers, setTypingUsers] = useState([]);
   const [page, setPage] = useState(0);

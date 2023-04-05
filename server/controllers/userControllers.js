@@ -22,7 +22,7 @@ module.exports.updateProfile = (req, res) => {
 };
 
 module.exports.updateSettings = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
     const userEmail = decoded.email;
@@ -64,7 +64,7 @@ module.exports.updateSettings = (req, res) => {
 };
 
 module.exports.updatePassword = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
     const userEmail = decoded.email;
@@ -118,7 +118,7 @@ module.exports.updatePassword = (req, res) => {
 };
 
 module.exports.resetNotificationCount = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 

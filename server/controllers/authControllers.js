@@ -96,7 +96,7 @@ module.exports.login = (req, res, next) => {
 
 // Check if user is authenticate, if not redirect him to /login
 module.exports.root = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
@@ -107,7 +107,7 @@ module.exports.root = (req, res) => {
 
 
 module.exports.getUser = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
   
@@ -150,12 +150,13 @@ module.exports.getCreator = (req, res) => {
     })
 }
 
+// Get 3 random users to follow
 module.exports.getRandom = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
-    const currentUserId = new mongoose.Types.ObjectId(userId); // Convert the current user's _id to an ObjectId
+    const currentUserId = new mongoose.Types.ObjectId(userId);
 
     User.aggregate([
         { $match: { _id: { $ne: currentUserId } } }, // Exclude the current user

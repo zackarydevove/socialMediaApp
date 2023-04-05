@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 module.exports.post = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
 
@@ -38,7 +38,7 @@ module.exports.getPost = (req, res) => {
 };
 
 module.exports.deletePost = (req, res) => {
-  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = decoded.userId;
 
@@ -136,7 +136,7 @@ module.exports.deletePost = (req, res) => {
 };
 
 module.exports.like = (req, res) => {
-  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = decoded.userId;
 
@@ -246,7 +246,7 @@ module.exports.like = (req, res) => {
   };
 
 module.exports.reply = (req, res) => {
-  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = decoded.userId;
 
@@ -304,7 +304,7 @@ module.exports.reply = (req, res) => {
 };
 
 module.exports.retweet = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
     const postId = req.body.postId;
@@ -394,7 +394,7 @@ module.exports.retweet = (req, res) => {
   };
 
 module.exports.bookmark = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+    const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.userId;
     const postId = req.body.postId;

@@ -17,7 +17,7 @@ function Thread() {
     const [openNav, setOpenNav] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [update, setUpdate ] = useState(false);
-    const { postId } = useParams(); // it return a key:value pair of the dynamic variable in url
+    const { postId } = useParams();
 
     const navigate = useNavigate();
 

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 // Create a new Chat and save the chatId in each participants chat
 module.exports.createChat = (req, res) => {
   const participants = req.body.participants;
-  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = decoded.userId;
 
@@ -50,7 +50,7 @@ module.exports.createChat = (req, res) => {
 // Get all chatsIds of user (for chat dashboard)
 module.exports.getChats = (req, res) => {
   // const userId = req.params.userId;
-  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const userId = decoded.userId;
 
@@ -101,7 +101,7 @@ module.exports.getChats = (req, res) => {
 // Get data of the other participant in a chat
 module.exports.getParticipants = (req, res) => {
   const chatId = req.params.chatId;
-  const token = req.headers.authorization.split(' ')[1]; // assuming token is in the format "Bearer <token>"
+  const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const currentUserId = decoded.userId;
 

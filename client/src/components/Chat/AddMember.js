@@ -14,7 +14,7 @@ function AddMember({
 }) {
     const [followedUsers, setFollowedUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const [selectedUsers, setSelectedUsers] = useState([]); // Change to array for groups chat
+    const [selectedUsers, setSelectedUsers] = useState([]);
 
     
     useEffect(() => {
