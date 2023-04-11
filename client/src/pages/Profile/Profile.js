@@ -154,8 +154,8 @@ function Profile() {
                     )}
                 </div>
 
-                <hr className='border-t-[#2f3336]'/>
-                <div  className='bg-black h-12' />
+                <hr className='sm:hidden border-t-[#2f3336]'/>
+                <div  className='sm:hidden bg-black h-12' />
 
 
             </div>
