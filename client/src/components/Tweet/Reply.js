@@ -92,7 +92,7 @@ function Reply({user, post, setOpenReply, setRefresh}) {
                                     <BsFillEmojiSmileFill size={'1.3em'} className='hover:cursor-pointer hover:text-blue-500'
                                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
                                     {showEmojiPicker && (
-                                        <div className='absolute z-30'>
+                                        <div className='absolute translate-x-[-40%] z-30'>
                                             <Picker
                                                 onEmojiSelect={addEmoji}
                                                 theme='dark'

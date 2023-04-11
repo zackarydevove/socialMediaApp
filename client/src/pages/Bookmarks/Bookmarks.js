@@ -30,6 +30,9 @@ function Bookmarks() {
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             <Navbarsm />
+            <div className='sm:hidden'>
+                <PostTweetButton/>
+            </div>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -41,9 +44,6 @@ function Bookmarks() {
             }
             <div className='max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
-                <div className='sm:hidden'>
-                    <PostTweetButton/>
-                </div>
                 <div>
                     {/* left */}
                     <div className='flex p-3'>
@@ -72,6 +72,8 @@ function Bookmarks() {
                     })
                 }
                 </div>
+                <hr className='border-t-[#2f3336]'/>
+                <div  className='bg-black h-12' />
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>

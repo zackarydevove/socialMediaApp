@@ -53,6 +53,9 @@ function Profile() {
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             <Navbarsm />
+            <div className='sm:hidden'>
+              <PostTweetButton update={update} setUpdate={setUpdate}/>
+            </div>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav} update={update} setUpdate={setUpdate}/> 
@@ -64,9 +67,6 @@ function Profile() {
             }
             <div className='flex flex-col max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
-                <div className='sm:hidden'>
-                    <PostTweetButton update={update} setUpdate={setUpdate}/>
-                </div>
                 <div>
                     <h1 className='max-sm:hidden text-xl font-bold p-3'>Profile</h1>
                     <div className='sm:hidden w-screen flex items-center relative p-3'>
@@ -154,6 +154,8 @@ function Profile() {
                     )}
                 </div>
 
+                <hr className='border-t-[#2f3336]'/>
+                <div  className='bg-black h-12' />
 
 
             </div>

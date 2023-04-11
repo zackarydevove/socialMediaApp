@@ -69,6 +69,8 @@ function Thread() {
                     <p>Loading...</p>
                 )}
                 </div>
+                <hr className='border-t-[#2f3336]'/>
+                <div  className='bg-black h-12' />
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>

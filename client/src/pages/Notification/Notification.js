@@ -42,6 +42,9 @@ function Notification() {
     return (
         <div className='font-opensans flex max-sm:flex-col h-screen w-screen bg-black text-white overflow-x-hidden sm:justify-center'>
             <Navbarsm />
+            <div className='sm:hidden'>
+                <PostTweetButton/>
+            </div>
             {openNav ? 
             <div>
                 <Navbar openNav={openNav} setOpenNav={setOpenNav}/> 
@@ -53,9 +56,6 @@ function Notification() {
             }
             <div className='flex flex-col max-sm:h-[95vh] max-sm:flex-grow relative sm:w-[600px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
-                <div className='sm:hidden'>
-                    <PostTweetButton/>
-                </div>
                 <div>
                     <h1 className='max-sm:hidden text-xl font-bold p-3'>Notifications</h1>
                     <div className='sm:hidden w-screen flex justify-center items-center relative p-3'>
@@ -80,6 +80,8 @@ function Notification() {
                         <div>No notifications to display</div>
                     )}
                 </div>
+                <hr className='border-t-[#2f3336]'/>
+                <div  className='bg-black h-12' />
             </div>
             
             <div className='max-lg:hidden p-3 ml-4'>

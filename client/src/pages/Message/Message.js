@@ -83,6 +83,9 @@ function Message() {
             </div>
             }
 
+            <div className='sm:hidden'>
+                <PostTweetButton/>
+            </div>
             
             <div className='flex flex-col max-sm:flex-grow relative lg:min-w-[388px] sm:min-w-[590px] sm:max-w-screen sm:border-r border-r-[#2f3336]'>
                 
@@ -102,9 +105,6 @@ function Message() {
                     </div>
                     :
                 <div>
-                    <div className='sm:hidden'>
-                        <PostTweetButton/>
-                    </div>
                     <div>
                         <div className='flex justify-between  p-3 pb-0'>
                             <div className='flex gap-2'>
@@ -159,7 +159,7 @@ function Message() {
                         participants={participants}
                         setParticipants={setParticipants}/>
                     : <EmptyConversation />
-                }
+                }              
             </div>
 
 
